@@ -1,6 +1,7 @@
 package eina.unizar.ingsoftapp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,10 @@ public class ReservationActivity extends AppCompatActivity {
         Button hab = findViewById(R.id.rooms);
 
         // Mods
+        res.setBackgroundColor(Color.parseColor("#000000"));
+        res.setTextColor(Color.parseColor("#FFFFFF"));
+        hab.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        hab.setTextColor(Color.parseColor("#000000"));
 
         // Listeners
         Intent intent = new Intent(ReservationActivity.this, RoomActivity.class);
