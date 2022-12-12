@@ -11,14 +11,9 @@ import android.widget.TextView;
 public class RoomAdapter extends ArrayAdapter<String> {
     private final Activity context;
 
-    private final String[] maintitle;
-    private final String[] subtitle;
-
-    public RoomAdapter(Activity context, String[] maintitle, String[] subtitle) {
+    public RoomAdapter(Activity context) {
         super(context, R.layout.room);
         this.context=context;
-        this.maintitle=maintitle;
-        this.subtitle=subtitle;
     }
 
     public View getView(View view, ViewGroup parent) {
