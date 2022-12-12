@@ -14,12 +14,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24dp"
             android:textStyle="bold"
             android:text="Margarita Robles" />
         <TextView
+            android:id="@+id/identifier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14dp"
@@ -42,8 +44,8 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/users" />
-
                 <TextView
+                    android:id="@+id/ocupantes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="x10" />
@@ -57,8 +59,8 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/dollar" />
-
                 <TextView
+                    android:id="@+id/precio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="24.95/persona/noche" />

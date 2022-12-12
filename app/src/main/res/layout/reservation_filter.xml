@@ -11,23 +11,29 @@
     <Button
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginRight="10dp"
-        android:icon="@drawable/users" />
+        android:textColor="#000"
+        android:backgroundTint="#fff"
+        android:text="cliente"/>
 
     <Button
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginHorizontal="10dp"
-        android:text="A-Z" />
+        android:textColor="#000"
+        android:backgroundTint="#fff"
+        android:text="tlf."/>
 
     <Button
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:icon="@drawable/dollar" />
+        android:layout_height="match_parent"
+        android:layout_marginRight="10dp"
+        android:textColor="#000"
+        android:backgroundTint="#fff"
+        android:text="fecha"/>
 
 
 </LinearLayout>

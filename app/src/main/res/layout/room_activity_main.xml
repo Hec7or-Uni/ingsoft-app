@@ -14,12 +14,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="24dp"
-            layout="@layout/filters" />
-        <include
+            layout="@layout/room_filter" />
+        <ListView
+            android:id="@+id/list_rooms"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            layout="@layout/room" />
+            android:layout_marginBottom="85dp"/>
+<!--        <include-->
+<!--            android:id="@+id/list_rooms"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginVertical="10dp"-->
+<!--            layout="@layout/room" />-->
     </LinearLayout>
 
     <LinearLayout
