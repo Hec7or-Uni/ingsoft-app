@@ -20,7 +20,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
             +"descripcion text not null,"
             +"capacidad integer not null,"
             +"precio integer not null,"
-            +"prorcentajeExtra integer not null"
+            +"porcentaje integer not null"
             +"); ";
 
     private static final String RESERVAS = "create table reservas ("

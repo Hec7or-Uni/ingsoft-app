@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">ingsoftapp</string>
+    <string name="nombre_hab">Nombre</string>
+    <string name="descripcion_hab">Descripcion</string>
+    <string name="capacidad_hab">Capacidad</string>
+    <string name="precio_hab">Precio</string>
+    <string name="porcentajeExtra_hab">Porcentaje Extra</string>
+    <string name="precio_res">Precio</string>
+    <string name="confirm">Confirm</string>
+    <string name="add">+</string>
+    <string name="edit_room">Edit Room</string>
+    <string name="title_rooms">Rooms</string>
 </resources>

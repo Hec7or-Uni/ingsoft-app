@@ -35,6 +35,14 @@
         android:paddingHorizontal="20dp"
         android:layout_marginBottom="14dp"
         android:orientation="vertical">
+        <Button
+            android:id="@+id/add"
+            android:text="Nueva habitación"
+            android:textAllCaps="false"
+            android:paddingVertical="15dp"
+            android:backgroundTint="@color/blue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
         <include
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

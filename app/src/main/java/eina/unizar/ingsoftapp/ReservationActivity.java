@@ -18,6 +18,7 @@ public class ReservationActivity extends AppCompatActivity {
         // References
         Button res = findViewById(R.id.reservations);
         Button hab = findViewById(R.id.rooms);
+        Button info = findViewById(R.id.add);
 
         // Mods
         res.setBackgroundColor(Color.parseColor("#000000"));
@@ -27,10 +28,18 @@ public class ReservationActivity extends AppCompatActivity {
 
         // Listeners
         Intent intent = new Intent(ReservationActivity.this, RoomActivity.class);
-        hab.setOnClickListener(new View.OnClickListener() {
+        res.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(intent);
+            }
+        });
+
+        Intent intent1 = new Intent(ReservationActivity.this, ReservationEditActivity.class);
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(intent1, 0);
             }
         });
     }

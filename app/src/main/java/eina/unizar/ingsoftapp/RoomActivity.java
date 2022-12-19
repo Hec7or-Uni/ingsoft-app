@@ -38,6 +38,7 @@ public class RoomActivity extends AppCompatActivity {
         // References
         Button res = findViewById(R.id.reservations);
         Button hab = findViewById(R.id.rooms);
+        Button info = findViewById(R.id.add);
         rooms = (ListView) findViewById(R.id.list_rooms);
 
         // Mods
@@ -46,13 +47,10 @@ public class RoomActivity extends AppCompatActivity {
         res.setBackgroundColor(Color.parseColor("#FFFFFF"));
         res.setTextColor(Color.parseColor("#000000"));
 
-        // Adapters
-        // RoomAdapter adapter=new RoomAdapter(this, R.layout.room);
-        // rooms.setAdapter(adapter);
-
-
-        RoomAdapter adapter = new RoomAdapter(this, maintitle, subtitle);
-        rooms.setAdapter(adapter);
+        //Leer de la base de datos
+        mDbHelper = new RoomsDbAdapter(this);
+        mDbHelper.open();
+        fillData();
 
         // Listeners
         Intent intent = new Intent(RoomActivity.this, ReservationActivity.class);
@@ -62,21 +60,26 @@ public class RoomActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Intent intent1 = new Intent(RoomActivity.this, RoomEditActivity.class);
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(intent1, 0);
+            }
+        });
+    }
+    private void fillData() {
+        Cursor notesCursor = mDbHelper.fetchAllHabitaciones();
+        String[] from = new String[] { RoomsDbAdapter.KEY_NOMBRE, RoomsDbAdapter.KEY_CAPACIDAD, RoomsDbAdapter.KEY_PRECIO, RoomsDbAdapter.KEY_ROWID  };
+        int[] to = new int[] { R.id.title, R.id.ocupantes, R.id.precio, R.id.identifier };
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.room, notesCursor, from, to);
+        rooms.setAdapter(adapter);
     }
 
-//    private void fillData() {
-//        // Get all of the notes from the database and
-//        // create the item list
-//        Cursor roomsCursor = mDbHelper.fetchAllHabitaciones();
-//        // Create an array to specify the fields we want to
-//        // display in the list ( only TITLE )
-//        String[] from = new String[] { RoomsDbAdapter.KEY_NOMBRE }; // aqui poner mas campos
-//        // and an array of the fields we want to bind
-//        // those fields to (in this case just text1 )
-//        int[] to = new int[] { 1 };
-//        // Now create an array adapter and set it to
-//        // display using our row
-//        RoomAdapter rooms = new RoomAdapter (this, R.layout.list_rooms, roomsCursor, from, to) ;
-//        mList.setAdapter(rooms);
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        fillData();
+    }
 }

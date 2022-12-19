@@ -6,23 +6,27 @@
     android:layout_marginTop="10dp"
     android:layout_marginRight="20dp"
     android:layout_marginBottom="10dp"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="10dp"
     android:orientation="horizontal">
     <Button
-        android:id="@+id/reservations"
+        android:id="@+id/delete_room"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
-        android:textAllCaps="false"
         android:paddingVertical="15dp"
-        android:text="Reservas" />
+        android:backgroundTint="@color/red"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:text="Eliminar" />
     <Button
-        android:id="@+id/rooms"
+        android:id="@+id/save_room"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:paddingVertical="15dp"
         android:textAllCaps="false"
-        android:text="Habitaciones" />
+        android:paddingVertical="15dp"
+        android:text="Confirmar" />
 </LinearLayout>

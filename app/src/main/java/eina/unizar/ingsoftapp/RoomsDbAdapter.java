@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import eina.unizar.ingsoftapp.DatabaseHelper;
 
 /**
  * Simple notes database access helper class. Defines the basic CRUD operations
@@ -22,7 +23,7 @@ public class RoomsDbAdapter {
     public static final String KEY_DESCRIPCION = "descripcion";
     public static final String KEY_CAPACIDAD = "capacidad";
     public static final String KEY_PRECIO = "precio";
-    public static final String KEY_PORCENTAJEEXTRA = "porcentajeExtra";
+    public static final String KEY_PORCENTAJEEXTRA = "porcentaje";
     public static final String KEY_ROWID = "_id";
 
     private DatabaseHelper mDbHelper;
@@ -71,16 +72,16 @@ public class RoomsDbAdapter {
      * @param descripcion the body of the note
      * @param capacidad the body of the note
      * @param precio the body of the note
-     * @param porcentajeExtra the body of the note
+     * @param porcentaje the body of the note
      * @return rowId or -1 if failed
      */
-    public long createHabitacion(String nombre, String descripcion, String capacidad, String precio, String porcentajeExtra) {
+    public long createHabitacion(String nombre, String descripcion, String capacidad, String precio, String porcentaje) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_DESCRIPCION, descripcion);
         initialValues.put(KEY_NOMBRE, nombre);
         initialValues.put(KEY_CAPACIDAD, capacidad);
         initialValues.put(KEY_PRECIO, precio);
-        initialValues.put(KEY_PORCENTAJEEXTRA, porcentajeExtra);
+        initialValues.put(KEY_PORCENTAJEEXTRA, porcentaje);
 
 
         return mDb.insert(DATABASE_TABLE, null, initialValues);
@@ -95,6 +96,10 @@ public class RoomsDbAdapter {
     public boolean deleteHabitacion(long rowId) {
 
         return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
+    }
+
+    public boolean deleteAllHabitaciones() {
+        return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + KEY_ROWID, null) > 0;
     }
 
     /**
@@ -139,16 +144,16 @@ public class RoomsDbAdapter {
      * @param descripcion value to set note body to
      * @param capacidad value to set note body to
      * @param precio value to set note body to
-     * @param porcentajeExtra value to set note body to
+     * @param porcentaje value to set note body to
      * @return true if the note was successfully updated, false otherwise
      */
-    public boolean updateHabitacion(long rowId, String nombre, String descripcion, String capacidad, String precio, String porcentajeExtra) {
+    public boolean updateHabitacion(long rowId, String nombre, String descripcion, String capacidad, String precio, String porcentaje) {
         ContentValues args = new ContentValues();
         args.put(KEY_NOMBRE, nombre);
         args.put(KEY_DESCRIPCION, descripcion);
         args.put(KEY_CAPACIDAD, capacidad);
         args.put(KEY_PRECIO, precio);
-        args.put(KEY_PORCENTAJEEXTRA, porcentajeExtra);
+        args.put(KEY_PORCENTAJEEXTRA, porcentaje);
 
         return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
     }
