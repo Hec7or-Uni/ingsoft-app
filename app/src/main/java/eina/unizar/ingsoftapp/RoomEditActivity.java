@@ -28,19 +28,12 @@ public class RoomEditActivity extends AppCompatActivity {
         mDbHelper = new RoomsDbAdapter( this );
         mDbHelper.open();
 
-        mRowId = (savedInstanceState == null )? null :
-                (Long)savedInstanceState.getSerializable(RoomsDbAdapter.KEY_ROWID ) ;
-        if(mRowId == null){
-            Bundle extras = getIntent().getExtras();
-            mRowId = (extras != null)?extras.getLong(RoomsDbAdapter.KEY_ROWID):null ;
-        }
-
         // References
-        EditText mNombreText = (EditText) findViewById(R.id.name_room);
-        EditText mCapacidadText = (EditText) findViewById(R.id.capacidad_room);
-        EditText mPrecioText = (EditText) findViewById(R.id.price_room);
-        EditText mPorcentajeEstraText = (EditText) findViewById(R.id.extra_room);
-        EditText mDescripcionText = (EditText) findViewById(R.id.description_room);
+        mNombreText = (EditText) findViewById(R.id.name_room);
+        mCapacidadText = (EditText) findViewById(R.id.capacidad_room);
+        mPrecioText = (EditText) findViewById(R.id.price_room);
+        mPorcentajeEstraText = (EditText) findViewById(R.id.extra_room);
+        mDescripcionText = (EditText) findViewById(R.id.description_room);
 
         ImageButton exitButton = (ImageButton) findViewById(R.id.exit_room);
         Button saveButton = (Button) findViewById(R.id.save_room);
@@ -48,6 +41,13 @@ public class RoomEditActivity extends AppCompatActivity {
 
         // Mods
         setTitle(R.string.edit_room);
+
+        mRowId = (savedInstanceState == null )? null :
+                (Long)savedInstanceState.getSerializable(RoomsDbAdapter.KEY_ROWID ) ;
+        if(mRowId == null){
+            Bundle extras = getIntent().getExtras();
+            mRowId = (extras != null)?extras.getLong(RoomsDbAdapter.KEY_ROWID):null ;
+        }
 
         // Listeners
         exitButton.setOnClickListener(new View.OnClickListener() {

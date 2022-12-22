@@ -1,6 +1,8 @@
 package eina.unizar.ingsoftapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.widget.AdapterView;
 import android.widget.SimpleCursorAdapter;
 import android.content.Intent;
 import android.database.Cursor;
@@ -65,6 +67,14 @@ public class RoomActivity extends AppCompatActivity {
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivityForResult(intent1, 0);
+            }
+        });
+
+        rooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Start the new activity here
                 startActivityForResult(intent1, 0);
             }
         });
