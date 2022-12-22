@@ -21,9 +21,6 @@ public class RoomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.room_activity_main);
 
-        // Database
-        // mDbHelper = new RoomsDbAdapter(this);
-        // mDbHelper.open();
 
         // References
         Button res = findViewById(R.id.reservations);

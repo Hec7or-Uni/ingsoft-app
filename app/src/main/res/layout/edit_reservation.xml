@@ -47,7 +47,7 @@
                 android:textStyle="normal"
                 android:text="Cliente" />
             <EditText
-                android:id="@+id/name_room"
+                android:id="@+id/name_res"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Margarita Robles"
@@ -69,7 +69,7 @@
                 android:textStyle="normal"
                 android:text="Teléfono" />
             <EditText
-                android:id="@+id/capacidad_room"
+                android:id="@+id/phone_res"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="phone"
@@ -98,7 +98,7 @@
                     android:textStyle="normal"
                     android:text="Fecha entrada:" />
                 <EditText
-                    android:id="@+id/price_reservation"
+                    android:id="@+id/entry_date_res"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#f8f8f8"
@@ -121,7 +121,7 @@
                     android:textStyle="normal"
                     android:text="Fecha salida" />
                 <EditText
-                    android:id="@+id/price_room"
+                    android:id="@+id/departure_date_res"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#f8f8f8"
@@ -143,6 +143,7 @@
                 android:textStyle="normal"
                 android:text="Habitaciones" />
         </LinearLayout>
+
         <ListView
             android:id="@+id/list_rooms"
             android:layout_width="match_parent"
@@ -157,7 +158,8 @@
         android:paddingHorizontal="20dp"
         android:layout_marginBottom="14dp"
         android:orientation="vertical">
-        <TextView
+        <EditText
+            android:id="@+id/price_res"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"

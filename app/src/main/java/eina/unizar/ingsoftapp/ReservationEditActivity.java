@@ -1,5 +1,6 @@
 package eina.unizar.ingsoftapp;
 
+
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -9,45 +10,42 @@ import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
 public class ReservationEditActivity extends AppCompatActivity {
-    private RoomsDbAdapter mDbHelper ;
+    private ReservationDbAdapter mDbHelper ;
     private EditText mNombreText;
-    private EditText mDescripcionText;
-    private EditText mCapacidadText;
+    private EditText mTelefonoText;
+    private EditText mFechaEntradaText;
+    private EditText mFechaSalidaText;
     private EditText mPrecioText;
-    private EditText mPorcentajeEstraText;
     private Long mRowId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Hace que la actividad se comporte como un modal
-        setContentView(R.layout.edit_room); //indicar el layout correspondiente
-
-        // Database
-        mDbHelper = new RoomsDbAdapter( this );
+        mDbHelper = new ReservationDbAdapter( this );
         mDbHelper.open();
+        setContentView(R.layout.edit_reservation); //indicar el layout correspondiente
+        setTitle(R.string.edit_reservation);
 
-        mRowId = (savedInstanceState == null )? null :
-                (Long)savedInstanceState.getSerializable(RoomsDbAdapter.KEY_ROWID ) ;
-        if(mRowId == null){
-            Bundle extras = getIntent().getExtras();
-            mRowId = (extras != null)?extras.getLong(RoomsDbAdapter.KEY_ROWID):null ;
-        }
+        mNombreText = (EditText) findViewById(R.id.name_res);
+        mTelefonoText = (EditText) findViewById(R.id.phone_res);
+        mFechaEntradaText = (EditText) findViewById(R.id.entry_date_res);
+        mFechaSalidaText = (EditText) findViewById(R.id.departure_date_res);
+        mPrecioText = (EditText) findViewById(R.id.price_res);
 
-        // References
-        EditText mNombreText = (EditText) findViewById(R.id.name_room);
-        EditText mCapacidadText = (EditText) findViewById(R.id.capacidad_room);
-        EditText mPrecioText = (EditText) findViewById(R.id.price_room);
-        EditText mPorcentajeEstraText = (EditText) findViewById(R.id.extra_room);
-        EditText mDescripcionText = (EditText) findViewById(R.id.description_room);
 
         ImageButton exitButton = (ImageButton) findViewById(R.id.exit_room);
         Button saveButton = (Button) findViewById(R.id.save_room);
         Button deleteButton = (Button) findViewById(R.id.delete_room);
 
-        // Mods
-        setTitle(R.string.edit_room);
+        mRowId = (savedInstanceState == null )?null :
+                (Long)savedInstanceState.getSerializable(ReservationDbAdapter.KEY_ROWID ) ;
+        if(mRowId == null){
+            Bundle extras = getIntent().getExtras();
+            mRowId = (extras != null)?
+                    extras.getLong(ReservationDbAdapter.KEY_ROWID):null ;
+        }
 
         // Listeners
         exitButton.setOnClickListener(new View.OnClickListener() {
@@ -67,21 +65,24 @@ public class ReservationEditActivity extends AppCompatActivity {
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                finish();
-            }
+                boolean eliminado = mDbHelper.deleteReserva(mRowId );
+                if(eliminado){
+                    finish();
+                }
 
+            }
         });
     }
 
     private void populateFields () {
         if ( mRowId != null ) {
-            Cursor note = mDbHelper.fetchHabitacion( mRowId ) ;
+            Cursor note = mDbHelper.fetchReserva( mRowId ) ;
             startManagingCursor( note ) ;
-            mNombreText.setText( note.getString(note.getColumnIndexOrThrow( RoomsDbAdapter.KEY_NOMBRE ) )) ;
-            mDescripcionText.setText(note.getString(note.getColumnIndexOrThrow( RoomsDbAdapter.KEY_DESCRIPCION ) ) ) ;
-            mCapacidadText.setText(note.getString(note.getColumnIndexOrThrow( RoomsDbAdapter.KEY_CAPACIDAD ) ) ) ;
-            mPrecioText.setText(note.getString(note.getColumnIndexOrThrow( RoomsDbAdapter.KEY_PRECIO ) ) ) ;
-            mPorcentajeEstraText.setText(note.getString(note.getColumnIndexOrThrow( RoomsDbAdapter.KEY_PORCENTAJEEXTRA ) ) ) ;
+            mNombreText.setText( note.getString(note.getColumnIndexOrThrow( ReservationDbAdapter.KEY_NOMBRE ) )) ;
+            mTelefonoText.setText(note.getString(note.getColumnIndexOrThrow( ReservationDbAdapter.KEY_TELEFONO ) ) ) ;
+            mFechaEntradaText.setText(note.getString(note.getColumnIndexOrThrow( ReservationDbAdapter.KEY_FECHAENTRADA ) ) ) ;
+            mFechaSalidaText.setText(note.getString(note.getColumnIndexOrThrow( ReservationDbAdapter.KEY_FECHASALIDA ) ) ) ;
+            mPrecioText.setText(note.getString(note.getColumnIndexOrThrow( ReservationDbAdapter.KEY_PRECIO ) ) ) ;
 
         }
     }
@@ -90,7 +91,7 @@ public class ReservationEditActivity extends AppCompatActivity {
     protected void onSaveInstanceState ( Bundle outState ) {
         super.onSaveInstanceState( outState ) ;
         saveState();
-        outState.putSerializable (RoomsDbAdapter.KEY_ROWID , mRowId ) ;
+        outState.putSerializable (ReservationDbAdapter.KEY_ROWID , mRowId ) ;
     }
 
     @Override
@@ -107,18 +108,18 @@ public class ReservationEditActivity extends AppCompatActivity {
 
     private void saveState () {
         String nombre = mNombreText.getText().toString();
-        String descripcion = mDescripcionText.getText().toString();
-        String capacidad = mCapacidadText.getText().toString();
+        String telefono = mTelefonoText.getText().toString();
+        String fechaEntrada = mFechaEntradaText.getText().toString();
+        String fechaSalida = mFechaSalidaText.getText().toString();
         String precio = mPrecioText.getText().toString();
-        String porcentajeExtra = mPorcentajeEstraText.getText().toString();
 
         if ( mRowId == null ) {
-            long id = mDbHelper.createHabitacion( nombre , descripcion, capacidad, precio, porcentajeExtra );
+            long id = mDbHelper.createReserva( nombre , telefono, fechaEntrada, fechaSalida, precio );
             if ( id > 0) {
                 mRowId = id ;
             }
         } else {
-            mDbHelper.updateHabitacion( mRowId , nombre , descripcion, capacidad, precio, porcentajeExtra );
+            mDbHelper.updateReserva( mRowId , nombre , telefono, fechaEntrada, fechaSalida, precio );
         }
     }
 

@@ -14,12 +14,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/title_res"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24dp"
             android:textStyle="bold"
             android:text="Ramón Garcia" />
         <TextView
+            android:id="@+id/dates_res"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14dp"
@@ -75,6 +77,7 @@
                     android:src="@drawable/dollar" />
 
                 <TextView
+                    android:id="@+id/price_res"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="900.42" />

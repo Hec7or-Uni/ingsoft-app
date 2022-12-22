@@ -29,6 +29,10 @@
             android:name=".RoomEditActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".ReservationEditActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>
