@@ -67,9 +67,12 @@ public class RoomEditActivity extends AppCompatActivity {
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                finish();
-            }
+                boolean eliminado = mDbHelper.deleteHabitacion(mRowId );
+                if(eliminado){
+                    finish();
+                }
 
+            }
         });
     }
 

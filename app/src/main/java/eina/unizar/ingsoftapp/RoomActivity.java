@@ -16,18 +16,6 @@ public class RoomActivity extends AppCompatActivity {
     private RoomsDbAdapter mDbHelper;
     ListView rooms;
 
-    String[] maintitle ={
-            "Title 1","Title 2",
-            "Title 3","Title 4",
-            "Title 5",
-    };
-
-    String[] subtitle ={
-            "Sub Title 1","Sub Title 2",
-            "Sub Title 3","Sub Title 4",
-            "Sub Title 5",
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +63,7 @@ public class RoomActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Start the new activity here
-                startActivityForResult(intent1, 0);
+                editNote(id);
             }
         });
     }
@@ -91,5 +79,14 @@ public class RoomActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         fillData();
+    }
+
+    /**
+     * Crea el objeto Intent asociado a editar una habitacion
+     */
+    protected void editNote(long id) {
+        Intent i = new Intent(this, RoomEditActivity.class);
+        i.putExtra(RoomsDbAdapter.KEY_ROWID, id);
+        startActivityForResult(i, 1);
     }
 }
