@@ -23,9 +23,11 @@ public class ReservationEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.edit_reservation); //indicar el layout correspondiente
+
+        //Database
         mDbHelper = new ReservationDbAdapter( this );
         mDbHelper.open();
-        setContentView(R.layout.edit_reservation); //indicar el layout correspondiente
         setTitle(R.string.edit_reservation);
 
         mNombreText = (EditText) findViewById(R.id.name_res);
@@ -35,9 +37,9 @@ public class ReservationEditActivity extends AppCompatActivity {
         mPrecioText = (EditText) findViewById(R.id.price_res);
 
 
-        ImageButton exitButton = (ImageButton) findViewById(R.id.exit_room);
-        Button saveButton = (Button) findViewById(R.id.save_room);
-        Button deleteButton = (Button) findViewById(R.id.delete_room);
+        //ImageButton exitButton = (ImageButton) findViewById(R.id.exit_room);
+        Button saveButton = (Button) findViewById(R.id.save_reservation);
+        Button deleteButton = (Button) findViewById(R.id.delete_reservation);
 
         mRowId = (savedInstanceState == null )?null :
                 (Long)savedInstanceState.getSerializable(ReservationDbAdapter.KEY_ROWID ) ;
@@ -48,12 +50,12 @@ public class ReservationEditActivity extends AppCompatActivity {
         }
 
         // Listeners
-        exitButton.setOnClickListener(new View.OnClickListener() {
+        /*exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
-        });
+        });*/
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
