@@ -109,6 +109,26 @@ public class ReservationDbAdapter {
     }
 
     /**
+     * Return a Cursor over the list of all notes in the database
+     *
+     * @return Cursor over all notes
+     */
+    public Cursor sortReservas(int type) {
+        switch (type){
+            case 1:
+                return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NOMBRE,
+                        KEY_TELEFONO, KEY_FECHAENTRADA, KEY_FECHASALIDA, KEY_PRECIO }, null, null, null, null,KEY_NOMBRE );
+            case 2:
+                return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NOMBRE,
+                        KEY_TELEFONO, KEY_FECHAENTRADA, KEY_FECHASALIDA, KEY_PRECIO }, null, null, null, null,KEY_TELEFONO );
+            default:
+                return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NOMBRE,
+                        KEY_TELEFONO, KEY_FECHAENTRADA, KEY_FECHASALIDA, KEY_PRECIO }, null, null, null, null,KEY_FECHAENTRADA );
+        }
+
+    }
+
+    /**
      * Return a Cursor positioned at the note that matches the given rowId
      *
      * @param rowId id of note to retrieve

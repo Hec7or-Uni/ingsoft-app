@@ -113,6 +113,21 @@ public class RoomsDbAdapter {
                 KEY_DESCRIPCION, KEY_CAPACIDAD, KEY_PRECIO, KEY_PORCENTAJEEXTRA}, null, null, null, null, null);
     }
 
+    public Cursor sortHabitaciones(int type) {
+        switch (type){
+            case 1:
+                return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NOMBRE,
+                        KEY_DESCRIPCION, KEY_CAPACIDAD, KEY_PRECIO, KEY_PORCENTAJEEXTRA}, null, null, null, null, KEY_ROWID);
+            case 2:
+                return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NOMBRE,
+                        KEY_DESCRIPCION, KEY_CAPACIDAD, KEY_PRECIO, KEY_PORCENTAJEEXTRA}, null, null, null, null, KEY_CAPACIDAD);
+            default:
+                return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NOMBRE,
+                        KEY_DESCRIPCION, KEY_CAPACIDAD, KEY_PRECIO, KEY_PORCENTAJEEXTRA}, null, null, null, null, KEY_PRECIO);
+        }
+
+    }
+
     /**
      * Return a Cursor positioned at the note that matches the given rowId
      *

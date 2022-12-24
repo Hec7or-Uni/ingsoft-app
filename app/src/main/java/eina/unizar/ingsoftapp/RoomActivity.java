@@ -26,6 +26,9 @@ public class RoomActivity extends AppCompatActivity {
         Button res = findViewById(R.id.reservations);
         Button hab = findViewById(R.id.rooms);
         Button info = findViewById(R.id.add);
+        Button id = findViewById(R.id.id);
+        Button ocs = findViewById(R.id.ocs);
+        Button price = findViewById(R.id.price);
         rooms = (ListView) findViewById(R.id.list_rooms);
 
         // Mods
@@ -63,9 +66,38 @@ public class RoomActivity extends AppCompatActivity {
                 editNote(id);
             }
         });
+
+        id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sort(1);
+            }
+        });
+
+        ocs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sort(2);
+            }
+        });
+
+        price.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sort(0);
+            }
+        });
     }
     private void fillData() {
         Cursor notesCursor = mDbHelper.fetchAllHabitaciones();
+        String[] from = new String[] { RoomsDbAdapter.KEY_NOMBRE, RoomsDbAdapter.KEY_CAPACIDAD, RoomsDbAdapter.KEY_PRECIO, RoomsDbAdapter.KEY_ROWID  };
+        int[] to = new int[] { R.id.title, R.id.ocupantes, R.id.precio, R.id.identifier };
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.room, notesCursor, from, to);
+        rooms.setAdapter(adapter);
+    }
+
+    private void sort(int type) {
+        Cursor notesCursor = mDbHelper.sortHabitaciones(type);
         String[] from = new String[] { RoomsDbAdapter.KEY_NOMBRE, RoomsDbAdapter.KEY_CAPACIDAD, RoomsDbAdapter.KEY_PRECIO, RoomsDbAdapter.KEY_ROWID  };
         int[] to = new int[] { R.id.title, R.id.ocupantes, R.id.precio, R.id.identifier };
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.room, notesCursor, from, to);

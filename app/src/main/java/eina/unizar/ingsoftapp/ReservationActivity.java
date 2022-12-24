@@ -24,6 +24,9 @@ public class ReservationActivity extends AppCompatActivity {
         Button res = findViewById(R.id.reservations);
         Button hab = findViewById(R.id.rooms);
         Button info = findViewById(R.id.add_res);
+        Button cli = findViewById(R.id.client);
+        Button tel = findViewById(R.id.phone);
+        Button date = findViewById(R.id.date);
         reservations = (ListView) findViewById(R.id.list_reservations);
 
         // Mods
@@ -61,9 +64,38 @@ public class ReservationActivity extends AppCompatActivity {
                 editNote(id);
             }
         });
+
+        cli.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sort(1);
+            }
+        });
+
+        tel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sort(2);
+            }
+        });
+
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sort(0);
+            }
+        });
     }
     private void fillData() {
         Cursor notesCursor = mDbHelper.fetchAllReservas();
+        String[] from = new String[] { ReservationDbAdapter.KEY_NOMBRE, ReservationDbAdapter.KEY_FECHAENTRADA, ReservationDbAdapter.KEY_PRECIO};
+        int[] to = new int[] { R.id.title_res, R.id.dates_res, R.id.price_res};
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.reservation, notesCursor, from, to);
+        reservations.setAdapter(adapter);
+    }
+
+    private void sort(int type) {
+        Cursor notesCursor = mDbHelper.sortReservas(type);
         String[] from = new String[] { ReservationDbAdapter.KEY_NOMBRE, ReservationDbAdapter.KEY_FECHAENTRADA, ReservationDbAdapter.KEY_PRECIO};
         int[] to = new int[] { R.id.title_res, R.id.dates_res, R.id.price_res};
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.reservation, notesCursor, from, to);
