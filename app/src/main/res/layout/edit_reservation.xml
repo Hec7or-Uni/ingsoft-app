@@ -103,7 +103,6 @@
                     android:layout_height="wrap_content"
                     android:background="#f8f8f8"
                     android:padding="8dp"
-                    android:inputType="date"
                     android:textColorHint="#000000" />
             </LinearLayout>
             <LinearLayout
@@ -126,7 +125,6 @@
                     android:layout_height="wrap_content"
                     android:background="#f8f8f8"
                     android:padding="8dp"
-                    android:inputType="date"
                     android:textColorHint="#000000" />
             </LinearLayout>
         </LinearLayout>
@@ -154,7 +152,11 @@
                 android:textStyle="normal"
                 android:text="Habitaciones" />
         </LinearLayout>
-
+        <include
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/dropdown" />
         <ListView
             android:id="@+id/list_rooms_2"
             android:layout_width="match_parent"

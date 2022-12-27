@@ -1,22 +1,28 @@
 package eina.unizar.ingsoftapp;
 
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.Calendar;
-
+import java.util.List;
 
 public class ReservationEditActivity extends AppCompatActivity {
     private RoomsDbAdapter mDbRoomHelper;
@@ -30,6 +36,7 @@ public class ReservationEditActivity extends AppCompatActivity {
     private Long mRowId;
     private ListView rooms;
     DatePickerDialog picker;
+    List<DropDownData> dataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,7 @@ public class ReservationEditActivity extends AppCompatActivity {
         mDbReservationHelper.open();
         setTitle(R.string.edit_reservation);
 
+        // References
         mNombreText = (EditText) findViewById(R.id.name_res);
         mTelefonoText = (EditText) findViewById(R.id.phone_res);
         mFechaEntradaText = (EditText) findViewById(R.id.entry_date_res);
@@ -50,6 +58,30 @@ public class ReservationEditActivity extends AppCompatActivity {
         Button saveButton = (Button) findViewById(R.id.save_reservation);
         Button deleteButton = (Button) findViewById(R.id.delete_reservation);
         rooms = (ListView) findViewById(R.id.list_rooms_2);
+
+        // mods
+        mFechaEntradaText.setInputType(InputType.TYPE_NULL);
+        mFechaSalidaText.setInputType(InputType.TYPE_NULL);
+
+
+        List<DropDownData> dataList = new ArrayList<>();
+        dataList.add(new DropDownData("hola 1", "name 1"));
+        dataList.add(new DropDownData("hola 2", "name 2"));
+
+//        Cursor cursor = mDbRoomHelper.fetchAllHabitaciones();
+//        while (cursor.moveToNext()) {
+//            String id = cursor.getString(cursor.getColumnIndexOrThrow(mDbRoomHelper.KEY_ROWID));
+//            String name = cursor.getString(cursor.getColumnIndexOrThrow(mDbRoomHelper.KEY_NOMBRE));
+//            dataList.add(new DropDownData(id, name));
+//        }
+
+        ArrayAdapter<DropDownData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, dataList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner spinner = findViewById(R.id.spinner);
+        spinner.setAdapter(adapter);
+
+        ListView listView = (ListView) findViewById(R.id.list_rooms_2);
+        listView.setAdapter(adapter);
 
         mRowId = (savedInstanceState == null )?null :
                 (Long)savedInstanceState.getSerializable(ReservationDbAdapter.KEY_ROWID ) ;
@@ -168,11 +200,16 @@ public class ReservationEditActivity extends AppCompatActivity {
         }
     }
 
-    private void getRoom() {
-        Cursor notesCursor = mDbRoomHelper.fetchAllHabitaciones();
-        String[] from = new String[] { RoomsDbAdapter.KEY_NOMBRE, RoomsDbAdapter.KEY_CAPACIDAD, RoomsDbAdapter.KEY_PRECIO, RoomsDbAdapter.KEY_ROWID  };
-        int[] to = new int[] { R.id.title, R.id.ocupantes, R.id.precio, R.id.identifier };
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.room, notesCursor, from, to);
-        rooms.setAdapter(adapter);
-    }
+//    private String  getRoom() {
+//        Cursor resultSet = mDbRoomHelper.fetchAllHabitaciones();
+//        if (resultSet.moveToFirst()) {
+//            do {
+//                @SuppressLint("Range") String id = resultSet.getString(resultSet.getColumnIndex(mDbRoomHelper.KEY_ROWID));
+//                @SuppressLint("Range") String name = resultSet.getString(resultSet.getColumnIndex(mDbRoomHelper.KEY_NOMBRE));
+//                dataList.add(new DropDownData(id, name));
+//            } while (resultSet.moveToNext());
+//        }
+//        resultSet.close();
+//        return "hola";
+//    }
 }

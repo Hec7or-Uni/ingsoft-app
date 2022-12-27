@@ -87,6 +87,7 @@ public class ReservationActivity extends AppCompatActivity {
             }
         });
     }
+
     private void fillData() {
         Cursor notesCursor = mDbHelper.fetchAllReservas();
         String[] from = new String[] { ReservationDbAdapter.KEY_NOMBRE, ReservationDbAdapter.KEY_FECHAENTRADA, ReservationDbAdapter.KEY_PRECIO};
