@@ -1,24 +1,35 @@
 package eina.unizar.ingsoftapp;
 
 
+import android.app.DatePickerDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Calendar;
+
 
 public class ReservationEditActivity extends AppCompatActivity {
-    private ReservationDbAdapter mDbHelper ;
+    private RoomsDbAdapter mDbRoomHelper;
+    private ReservationDbAdapter mDbReservationHelper;
+    private HabitacionesReservasDbAdapter mDbRoomMixHelper;
     private EditText mNombreText;
     private EditText mTelefonoText;
     private EditText mFechaEntradaText;
     private EditText mFechaSalidaText;
-    private EditText mPrecioText;
+    private TextView mPrecioText;
     private Long mRowId;
+    private ListView rooms;
+    DatePickerDialog picker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,20 +37,19 @@ public class ReservationEditActivity extends AppCompatActivity {
         setContentView(R.layout.edit_reservation); //indicar el layout correspondiente
 
         //Database
-        mDbHelper = new ReservationDbAdapter( this );
-        mDbHelper.open();
+        mDbReservationHelper = new ReservationDbAdapter( this );
+        mDbReservationHelper.open();
         setTitle(R.string.edit_reservation);
 
         mNombreText = (EditText) findViewById(R.id.name_res);
         mTelefonoText = (EditText) findViewById(R.id.phone_res);
         mFechaEntradaText = (EditText) findViewById(R.id.entry_date_res);
         mFechaSalidaText = (EditText) findViewById(R.id.departure_date_res);
-        mPrecioText = (EditText) findViewById(R.id.price_res);
-
-
-        //ImageButton exitButton = (ImageButton) findViewById(R.id.exit_room);
+        mPrecioText = (TextView) findViewById(R.id.price_res);
+        ImageButton exitButton = (ImageButton) findViewById(R.id.exit_reservation);
         Button saveButton = (Button) findViewById(R.id.save_reservation);
         Button deleteButton = (Button) findViewById(R.id.delete_reservation);
+        rooms = (ListView) findViewById(R.id.list_rooms_2);
 
         mRowId = (savedInstanceState == null )?null :
                 (Long)savedInstanceState.getSerializable(ReservationDbAdapter.KEY_ROWID ) ;
@@ -50,35 +60,68 @@ public class ReservationEditActivity extends AppCompatActivity {
         }
 
         // Listeners
-        /*exitButton.setOnClickListener(new View.OnClickListener() {
+        exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
-        });*/
+        });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                setResult(RESULT_OK);
+        saveButton.setOnClickListener(view -> {
+            setResult(RESULT_OK);
+            finish();
+        });
+
+        deleteButton.setOnClickListener(view -> {
+            boolean eliminado = mDbReservationHelper.deleteReserva(mRowId );
+            if(eliminado){
                 finish();
             }
 
         });
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                boolean eliminado = mDbHelper.deleteReserva(mRowId );
-                if(eliminado){
-                    finish();
-                }
+        mFechaEntradaText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                picker = new DatePickerDialog(ReservationEditActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                mFechaEntradaText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            }
+                        }, year, month, day);
+                picker.show();
+            }
+        });
 
+        mFechaSalidaText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                picker = new DatePickerDialog(ReservationEditActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                mFechaSalidaText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            }
+                        }, year, month, day);
+                picker.show();
             }
         });
     }
 
     private void populateFields () {
         if ( mRowId != null ) {
-            Cursor note = mDbHelper.fetchReserva( mRowId ) ;
+            Cursor note = mDbReservationHelper.fetchReserva( mRowId ) ;
             startManagingCursor( note ) ;
             mNombreText.setText( note.getString(note.getColumnIndexOrThrow( ReservationDbAdapter.KEY_NOMBRE ) )) ;
             mTelefonoText.setText(note.getString(note.getColumnIndexOrThrow( ReservationDbAdapter.KEY_TELEFONO ) ) ) ;
@@ -116,13 +159,20 @@ public class ReservationEditActivity extends AppCompatActivity {
         String precio = mPrecioText.getText().toString();
 
         if ( mRowId == null ) {
-            long id = mDbHelper.createReserva( nombre , telefono, fechaEntrada, fechaSalida, precio );
+            long id = mDbReservationHelper.createReserva( nombre , telefono, fechaEntrada, fechaSalida, precio );
             if ( id > 0) {
                 mRowId = id ;
             }
         } else {
-            mDbHelper.updateReserva( mRowId , nombre , telefono, fechaEntrada, fechaSalida, precio );
+            mDbReservationHelper.updateReserva( mRowId , nombre , telefono, fechaEntrada, fechaSalida, precio );
         }
     }
 
+    private void getRoom() {
+        Cursor notesCursor = mDbRoomHelper.fetchAllHabitaciones();
+        String[] from = new String[] { RoomsDbAdapter.KEY_NOMBRE, RoomsDbAdapter.KEY_CAPACIDAD, RoomsDbAdapter.KEY_PRECIO, RoomsDbAdapter.KEY_ROWID  };
+        int[] to = new int[] { R.id.title, R.id.ocupantes, R.id.precio, R.id.identifier };
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.room, notesCursor, from, to);
+        rooms.setAdapter(adapter);
+    }
 }

@@ -26,7 +26,7 @@
                 android:text="Reservas" />
 
             <ImageButton
-                android:id="@+id/exit_room"
+                android:id="@+id/exit_reservation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/exit"
@@ -135,6 +135,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <Button
+                android:id="@+id/addRoom"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:paddingVertical="15dp"
+                android:backgroundTint="@color/blue"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:text="+ Habitación" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -145,7 +156,7 @@
         </LinearLayout>
 
         <ListView
-            android:id="@+id/list_rooms"
+            android:id="@+id/list_rooms_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="85dp"/>
@@ -158,11 +169,12 @@
         android:paddingHorizontal="20dp"
         android:layout_marginBottom="14dp"
         android:orientation="vertical">
-        <EditText
+        <TextView
             android:id="@+id/price_res"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_gravity="bottom"
             android:textSize="40dp"
             android:layout_marginBottom="4dp"
             android:textStyle="bold"

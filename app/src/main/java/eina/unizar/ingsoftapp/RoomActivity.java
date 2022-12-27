@@ -88,6 +88,7 @@ public class RoomActivity extends AppCompatActivity {
             }
         });
     }
+
     private void fillData() {
         Cursor notesCursor = mDbHelper.fetchAllHabitaciones();
         String[] from = new String[] { RoomsDbAdapter.KEY_NOMBRE, RoomsDbAdapter.KEY_CAPACIDAD, RoomsDbAdapter.KEY_PRECIO, RoomsDbAdapter.KEY_ROWID  };
