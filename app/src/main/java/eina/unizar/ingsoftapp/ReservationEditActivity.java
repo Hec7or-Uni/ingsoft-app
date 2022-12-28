@@ -3,6 +3,7 @@ package eina.unizar.ingsoftapp;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -35,8 +37,9 @@ public class ReservationEditActivity extends AppCompatActivity {
     private TextView mPrecioText;
     private Long mRowId;
     private ListView rooms;
-    DatePickerDialog picker;
-    List<DropDownData> dataList;
+    private DatePickerDialog picker;
+    private List<String> items;
+    private ListViewAdapter adapterS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,10 @@ public class ReservationEditActivity extends AppCompatActivity {
         //Database
         mDbReservationHelper = new ReservationDbAdapter( this );
         mDbReservationHelper.open();
+        mDbRoomHelper = new RoomsDbAdapter( this );
+        mDbRoomHelper.open();
+        mDbRoomMixHelper = new HabitacionesReservasDbAdapter( this );
+        mDbRoomMixHelper.open();
         setTitle(R.string.edit_reservation);
 
         // References
@@ -57,31 +64,23 @@ public class ReservationEditActivity extends AppCompatActivity {
         ImageButton exitButton = (ImageButton) findViewById(R.id.exit_reservation);
         Button saveButton = (Button) findViewById(R.id.save_reservation);
         Button deleteButton = (Button) findViewById(R.id.delete_reservation);
+        Button add = findViewById(R.id.addRoom);
         rooms = (ListView) findViewById(R.id.list_rooms_2);
 
         // mods
         mFechaEntradaText.setInputType(InputType.TYPE_NULL);
         mFechaSalidaText.setInputType(InputType.TYPE_NULL);
 
-
-        List<DropDownData> dataList = new ArrayList<>();
-        dataList.add(new DropDownData("hola 1", "name 1"));
-        dataList.add(new DropDownData("hola 2", "name 2"));
-
-//        Cursor cursor = mDbRoomHelper.fetchAllHabitaciones();
-//        while (cursor.moveToNext()) {
-//            String id = cursor.getString(cursor.getColumnIndexOrThrow(mDbRoomHelper.KEY_ROWID));
-//            String name = cursor.getString(cursor.getColumnIndexOrThrow(mDbRoomHelper.KEY_NOMBRE));
-//            dataList.add(new DropDownData(id, name));
-//        }
-
-        ArrayAdapter<DropDownData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, dataList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner spinner = findViewById(R.id.spinner);
-        spinner.setAdapter(adapter);
-
-        ListView listView = (ListView) findViewById(R.id.list_rooms_2);
-        listView.setAdapter(adapter);
+        // Declaración de la lista que contiene el desplegable
+        items = new ArrayList<>();
+        Cursor cursor = mDbRoomHelper.fetchAllHabitaciones();
+        while (cursor.moveToNext()) {
+            String id = cursor.getString(cursor.getColumnIndexOrThrow(mDbRoomHelper.KEY_ROWID));
+            items.add(id);
+        }
+        //items = Arrays.asList("Item 1", "Item 2", "Item 3");
+        adapterS = new ListViewAdapter(this, items);
+        rooms.setAdapter(adapterS);
 
         mRowId = (savedInstanceState == null )?null :
                 (Long)savedInstanceState.getSerializable(ReservationDbAdapter.KEY_ROWID ) ;
@@ -110,6 +109,13 @@ public class ReservationEditActivity extends AppCompatActivity {
                 finish();
             }
 
+        });
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
         });
 
         mFechaEntradaText.setOnClickListener(new View.OnClickListener() {

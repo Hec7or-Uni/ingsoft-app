@@ -110,4 +110,18 @@ public class HabitacionesReservasDbAdapter {
         return mCursor;
 
     }
+
+    public Cursor fetchAllHabitacionReserva(long idReserva) throws SQLException {
+
+        Cursor mCursor =
+
+                mDb.query(true, DATABASE_TABLE, new String[] {KEY_IDHABITACION, KEY_IDRESERVA, KEY_OCUPACION},
+                                KEY_IDRESERVA + "=" + idReserva, null,
+                        null, null, null, null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+
+    }
 }
