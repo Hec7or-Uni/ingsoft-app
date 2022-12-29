@@ -18,6 +18,7 @@ public class ListViewAdapter extends ArrayAdapter<String>  {
     private final Context context;
     private final List<String> items;
     private RoomsDbAdapter mDbRoomHelper;
+    private HabitacionesReservasDbAdapter mDbRoomMixHelper;
 
     public ListViewAdapter(Context context, List<String> items) {
         super(context, R.layout.dropdown, items);
@@ -54,5 +55,7 @@ public class ListViewAdapter extends ArrayAdapter<String>  {
 
         return convertView;
     }
+
+
 }
 

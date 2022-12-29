@@ -83,6 +83,7 @@ public class ReservationEditActivity extends AppCompatActivity {
                     extras.getLong(ReservationDbAdapter.KEY_ROWID):null ;
         }
 
+
         // Listeners
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +95,7 @@ public class ReservationEditActivity extends AppCompatActivity {
         saveButton.setOnClickListener(view -> {
             setResult(RESULT_OK);
             finish();
-            });
+        });
 
         deleteButton.setOnClickListener(view -> {
             boolean eliminado = mDbReservationHelper.deleteReserva(mRowId );
@@ -158,6 +159,16 @@ public class ReservationEditActivity extends AppCompatActivity {
         });
     }
 
+    private void fillData() {
+        Cursor cursorHabs = mDbRoomMixHelper.fetchAllHabitacionReserva(mRowId);
+        while (cursorHabs.moveToNext()) {
+            String id = cursorHabs.getString(cursorHabs.getColumnIndexOrThrow(mDbRoomMixHelper.KEY_IDHABITACION));
+            items.add(id);
+        }
+        ListViewAdapter adapter = new ListViewAdapter(ReservationEditActivity.this, items);
+        rooms.setAdapter(adapter);
+    }
+
     private void populateFields () {
         if ( mRowId != null ) {
             Cursor note = mDbReservationHelper.fetchReserva( mRowId ) ;
@@ -167,6 +178,8 @@ public class ReservationEditActivity extends AppCompatActivity {
             mFechaEntradaText.setText(note.getString(note.getColumnIndexOrThrow( ReservationDbAdapter.KEY_FECHAENTRADA ) ) ) ;
             mFechaSalidaText.setText(note.getString(note.getColumnIndexOrThrow( ReservationDbAdapter.KEY_FECHASALIDA ) ) ) ;
             mPrecioText.setText(note.getString(note.getColumnIndexOrThrow( ReservationDbAdapter.KEY_PRECIO ) ) ) ;
+
+            fillData();
 
         }
     }
@@ -204,6 +217,17 @@ public class ReservationEditActivity extends AppCompatActivity {
             }
         } else {
             mDbReservationHelper.updateReserva( mRowId , nombre , telefono, fechaEntrada, fechaSalida, precio );
+        }
+
+        for (int i = 0; i < rooms.getCount(); i++) {
+            View listItem = rooms.getChildAt(i);
+            Spinner field1 = listItem.findViewById(R.id.spinner);
+            EditText field2 = listItem.findViewById(R.id.ocupacion);
+            String field1Value = field1.toString();
+            String field2Value = field2.getText().toString();
+            // Do something with the values of field1 and field2
+            mDbRoomMixHelper.createHabitacionReserva(field1Value, ReservationDbAdapter.KEY_ROWID, field2Value);
+
         }
     }
 
