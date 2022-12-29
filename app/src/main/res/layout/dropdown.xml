@@ -16,7 +16,7 @@
         android:layout_marginRight="5dp"
         android:layout_height="match_parent"/>
 
-    <TextView
+    <EditText
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:gravity="center"

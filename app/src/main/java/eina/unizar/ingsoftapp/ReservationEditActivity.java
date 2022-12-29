@@ -39,7 +39,7 @@ public class ReservationEditActivity extends AppCompatActivity {
     private ListView rooms;
     private DatePickerDialog picker;
     private List<String> items;
-    private ListViewAdapter adapterS;
+    private Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +73,7 @@ public class ReservationEditActivity extends AppCompatActivity {
 
         // Declaración de la lista que contiene el desplegable
         items = new ArrayList<>();
-        Cursor cursor = mDbRoomHelper.fetchAllHabitaciones();
-        while (cursor.moveToNext()) {
-            String id = cursor.getString(cursor.getColumnIndexOrThrow(mDbRoomHelper.KEY_ROWID));
-            items.add(id);
-        }
-        //items = Arrays.asList("Item 1", "Item 2", "Item 3");
-        adapterS = new ListViewAdapter(this, items);
-        rooms.setAdapter(adapterS);
+
 
         mRowId = (savedInstanceState == null )?null :
                 (Long)savedInstanceState.getSerializable(ReservationDbAdapter.KEY_ROWID ) ;
@@ -101,7 +94,7 @@ public class ReservationEditActivity extends AppCompatActivity {
         saveButton.setOnClickListener(view -> {
             setResult(RESULT_OK);
             finish();
-        });
+            });
 
         deleteButton.setOnClickListener(view -> {
             boolean eliminado = mDbReservationHelper.deleteReserva(mRowId );
@@ -114,6 +107,14 @@ public class ReservationEditActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Cuando se clica el botón añadir se insertara un elemento de la lista y se creara en la BD
+                cursor = mDbRoomHelper.fetchAllHabitaciones();
+                if (cursor.moveToNext()) {
+                    String id = cursor.getString(cursor.getColumnIndexOrThrow(mDbRoomHelper.KEY_ROWID));
+                    items.add(id);
+                }
+                ListViewAdapter adapter = new ListViewAdapter(ReservationEditActivity.this, items);
+                rooms.setAdapter(adapter);
 
             }
         });
@@ -206,16 +207,4 @@ public class ReservationEditActivity extends AppCompatActivity {
         }
     }
 
-//    private String  getRoom() {
-//        Cursor resultSet = mDbRoomHelper.fetchAllHabitaciones();
-//        if (resultSet.moveToFirst()) {
-//            do {
-//                @SuppressLint("Range") String id = resultSet.getString(resultSet.getColumnIndex(mDbRoomHelper.KEY_ROWID));
-//                @SuppressLint("Range") String name = resultSet.getString(resultSet.getColumnIndex(mDbRoomHelper.KEY_NOMBRE));
-//                dataList.add(new DropDownData(id, name));
-//            } while (resultSet.moveToNext());
-//        }
-//        resultSet.close();
-//        return "hola";
-//    }
 }
