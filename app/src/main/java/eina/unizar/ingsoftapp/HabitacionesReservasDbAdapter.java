@@ -6,6 +6,12 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Simple notes database access helper class. Defines the basic CRUD operations
  * for the notepad example, and gives the ability to list all notes as well as
@@ -21,6 +27,7 @@ public class HabitacionesReservasDbAdapter {
     public static final String KEY_IDHABITACION = "idHabitacion";
     public static final String KEY_IDRESERVA = "idReserva";
     public static final String KEY_OCUPACION = "ocupacion";
+
 
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
@@ -67,7 +74,7 @@ public class HabitacionesReservasDbAdapter {
      * @param idReserva the body of the note
      * @param ocupacion the body of the note
      */
-    public long createHabitacionReserva(String idHabitacion, String idReserva, String ocupacion) {
+    public long createHabitacionReserva(long idHabitacion, long idReserva, String ocupacion) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_IDHABITACION, idHabitacion);
         initialValues.put(KEY_IDRESERVA, idReserva);
@@ -85,8 +92,15 @@ public class HabitacionesReservasDbAdapter {
      */
     public boolean deleteHabitacionReserva(long idHabitacion, long idReserva  ) {
 
-        return mDb.delete(DATABASE_TABLE, KEY_IDHABITACION + "=" + idHabitacion + "AND" +
+        return mDb.delete(DATABASE_TABLE, KEY_IDHABITACION + "=" + idHabitacion + " AND " +
                 KEY_IDRESERVA + "=" + idReserva, null) > 0;
+    }
+
+    public boolean exiteHabitacionReserva(long idHabitacion, long idReserva  ) {
+
+        return mDb.query(true, DATABASE_TABLE, new String[] {KEY_IDHABITACION, KEY_IDRESERVA, KEY_OCUPACION}, KEY_IDHABITACION + "=" + idHabitacion+ " AND " +
+                        KEY_IDRESERVA + "=" + idReserva, null,
+                null, null, null, null) != null;
     }
 
     /**
@@ -101,7 +115,7 @@ public class HabitacionesReservasDbAdapter {
 
         Cursor mCursor =
 
-                mDb.query(true, DATABASE_TABLE, new String[] {KEY_IDHABITACION, KEY_IDRESERVA, KEY_OCUPACION}, KEY_IDHABITACION + "=" + idHabitacion+ "AND" +
+                mDb.query(true, DATABASE_TABLE, new String[] {KEY_IDHABITACION, KEY_IDRESERVA, KEY_OCUPACION}, KEY_IDHABITACION + "=" + idHabitacion+ " AND " +
                                 KEY_IDRESERVA + "=" + idReserva, null,
                         null, null, null, null);
         if (mCursor != null) {
@@ -113,15 +127,34 @@ public class HabitacionesReservasDbAdapter {
 
     public Cursor fetchAllHabitacionReserva(long idReserva) throws SQLException {
 
-        Cursor mCursor =
-
-                mDb.query(true, DATABASE_TABLE, new String[] {KEY_IDHABITACION, KEY_IDRESERVA, KEY_OCUPACION},
-                                KEY_IDRESERVA + "=" + idReserva, null,
+        return mDb.query(true, DATABASE_TABLE, new String[] {KEY_IDHABITACION, KEY_IDRESERVA, KEY_OCUPACION}, KEY_IDRESERVA + "=" + idReserva, null,
                         null, null, null, null);
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-        }
-        return mCursor;
 
+
+
+    }
+
+    public boolean updateHabitacionReserva(long idHabitacion, long idReserva, String ocupacion) {
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_IDHABITACION, idHabitacion);
+        initialValues.put(KEY_IDRESERVA, idReserva);
+        initialValues.put(KEY_OCUPACION, ocupacion);
+
+
+        return mDb.update(DATABASE_TABLE, initialValues, KEY_IDHABITACION + "=" + idHabitacion + " AND " + KEY_IDRESERVA + "=" + idReserva , null) > 0;
+    }
+
+    public List<String> getListData() throws SQLException {
+        List<String> list = new ArrayList<>();
+
+        // Ejecuta la consulta y obtén el resultado
+        Cursor rs = mDb.rawQuery("SELECT * FROM habitaciones_reservas", null);
+
+        // Recorre el ResultSet y agrega los datos a la lista
+        while (rs.moveToNext()) {
+            list.add(rs.getString(rs.getColumnIndexOrThrow(KEY_IDHABITACION)));
+        }
+
+        return list;
     }
 }

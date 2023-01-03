@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -21,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -67,6 +67,7 @@ public class ReservationEditActivity extends AppCompatActivity {
         Button add = findViewById(R.id.addRoom);
         rooms = (ListView) findViewById(R.id.list_rooms_2);
 
+        //fillData();
         // mods
         mFechaEntradaText.setInputType(InputType.TYPE_NULL);
         mFechaSalidaText.setInputType(InputType.TYPE_NULL);
@@ -83,7 +84,6 @@ public class ReservationEditActivity extends AppCompatActivity {
                     extras.getLong(ReservationDbAdapter.KEY_ROWID):null ;
         }
 
-
         // Listeners
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,9 +92,26 @@ public class ReservationEditActivity extends AppCompatActivity {
             }
         });
 
-        saveButton.setOnClickListener(view -> {
-            setResult(RESULT_OK);
-            finish();
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                mDbRoomMixHelper.createHabitacionReserva(1, 1, "2");
+                for (int i = 0; i < rooms.getCount(); i++) {
+                    View listItem = rooms.getChildAt(i);
+                    Spinner field1 = listItem.findViewById(R.id.spinner);
+                    EditText field2 = listItem.findViewById(R.id.ocupacion);
+                    DropDownData data = (DropDownData) field1.getSelectedItem();
+                    long field1Value = Long.parseLong(data.getId());
+                    String field2Value = field2.getText().toString();
+                    // Do something with the values of field1 and field2
+                    if ( mDbRoomMixHelper.exiteHabitacionReserva(field1Value, mRowId ) ) {
+                        mDbRoomMixHelper.updateHabitacionReserva( field1Value, mRowId , field2Value );
+                    } else {
+                        mDbRoomMixHelper.createHabitacionReserva(field1Value, mRowId, field2Value);
+                    }
+                }
+                setResult(RESULT_OK);
+                finish();
+            }
         });
 
         deleteButton.setOnClickListener(view -> {
@@ -108,14 +125,16 @@ public class ReservationEditActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // Cuando se clica el botón añadir se insertara un elemento de la lista y se creara en la BD
                 cursor = mDbRoomHelper.fetchAllHabitaciones();
                 if (cursor.moveToNext()) {
-                    String id = cursor.getString(cursor.getColumnIndexOrThrow(mDbRoomHelper.KEY_ROWID));
+                    String id = cursor.getString(cursor.getColumnIndexOrThrow(RoomsDbAdapter.KEY_ROWID));
                     items.add(id);
                 }
                 ListViewAdapter adapter = new ListViewAdapter(ReservationEditActivity.this, items);
                 rooms.setAdapter(adapter);
+                // Se ha añadido un elemento a la lista y lo guardamso en la BD, si no esta creado se crea y sino se actualiza
 
             }
         });
@@ -159,17 +178,26 @@ public class ReservationEditActivity extends AppCompatActivity {
         });
     }
 
-    private void fillData() {
-        Cursor cursorHabs = mDbRoomMixHelper.fetchAllHabitacionReserva(mRowId);
-        while (cursorHabs.moveToNext()) {
-            String id = cursorHabs.getString(cursorHabs.getColumnIndexOrThrow(mDbRoomMixHelper.KEY_IDHABITACION));
-            items.add(id);
-        }
-        ListViewAdapter adapter = new ListViewAdapter(ReservationEditActivity.this, items);
-        rooms.setAdapter(adapter);
-    }
+    /*private void fillData(){
+        if ( mRowId != null ) {
+            Cursor cursorHabs = mDbRoomMixHelper.fetchAllHabitacionReserva(mRowId);
+            String[] from = new String[] {HabitacionesReservasDbAdapter.KEY_IDHABITACION};
+            int[] to = new int[] { R.id.spinner};
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.dropdown, cursorHabs, from, to);
 
-    private void populateFields () {
+            List<String> data = new ArrayList<>();
+            while (cursorHabs.moveToNext()) {
+                String id = cursorHabs.getString(cursorHabs.getColumnIndexOrThrow(HabitacionesReservasDbAdapter.KEY_IDHABITACION));
+                data.add(id);
+            }
+            ListViewAdapter adapter = new ListViewAdapter(ReservationEditActivity.this, data);
+
+            rooms.setAdapter(adapter);
+        }
+
+    }*/
+
+    private void populateFields () throws SQLException {
         if ( mRowId != null ) {
             Cursor note = mDbReservationHelper.fetchReserva( mRowId ) ;
             startManagingCursor( note ) ;
@@ -178,9 +206,17 @@ public class ReservationEditActivity extends AppCompatActivity {
             mFechaEntradaText.setText(note.getString(note.getColumnIndexOrThrow( ReservationDbAdapter.KEY_FECHAENTRADA ) ) ) ;
             mFechaSalidaText.setText(note.getString(note.getColumnIndexOrThrow( ReservationDbAdapter.KEY_FECHASALIDA ) ) ) ;
             mPrecioText.setText(note.getString(note.getColumnIndexOrThrow( ReservationDbAdapter.KEY_PRECIO ) ) ) ;
-
-            fillData();
-
+            // Bucle que se supone que lee las habitaciones reservadas de la BD para una reserva mRowId
+            // y las añade al adaptador
+            Cursor cursorHabs = mDbRoomMixHelper.fetchAllHabitacionReserva(mRowId);
+            if (cursorHabs.moveToFirst()) {
+                do {
+                    String id = cursorHabs.getString(cursorHabs.getColumnIndexOrThrow(HabitacionesReservasDbAdapter.KEY_IDHABITACION));
+                    items.add(id);
+                } while (cursorHabs.moveToNext());
+            }
+            ListViewAdapter adapter = new ListViewAdapter(ReservationEditActivity.this, items);
+            rooms.setAdapter(adapter);
         }
     }
 
@@ -192,6 +228,13 @@ public class ReservationEditActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        //fillData();
+
+    }
+
+    @Override
     protected void onPause () {
         super.onPause();
         saveState();
@@ -200,7 +243,11 @@ public class ReservationEditActivity extends AppCompatActivity {
     @Override
     protected void onResume () {
         super.onResume();
-        populateFields();
+        try {
+            populateFields();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void saveState () {
@@ -218,16 +265,21 @@ public class ReservationEditActivity extends AppCompatActivity {
         } else {
             mDbReservationHelper.updateReserva( mRowId , nombre , telefono, fechaEntrada, fechaSalida, precio );
         }
-
+        // Bucle que lee la lista de habitaciones y almacena en la BD las habitaciones para una reserva,
+        // si la reserva ya existia se actualiza y sino se crea
         for (int i = 0; i < rooms.getCount(); i++) {
             View listItem = rooms.getChildAt(i);
             Spinner field1 = listItem.findViewById(R.id.spinner);
             EditText field2 = listItem.findViewById(R.id.ocupacion);
-            String field1Value = field1.toString();
+            DropDownData data = (DropDownData) field1.getSelectedItem();
+            long field1Value = Long.parseLong(data.getId());
             String field2Value = field2.getText().toString();
             // Do something with the values of field1 and field2
-            mDbRoomMixHelper.createHabitacionReserva(field1Value, ReservationDbAdapter.KEY_ROWID, field2Value);
-
+            if ( mDbRoomMixHelper.exiteHabitacionReserva(field1Value, mRowId ) ) {
+                mDbRoomMixHelper.updateHabitacionReserva( field1Value, mRowId , field2Value );
+            } else {
+                mDbRoomMixHelper.createHabitacionReserva(field1Value, mRowId, field2Value);
+            }
         }
     }
 

@@ -18,12 +18,18 @@ public class ListViewAdapter extends ArrayAdapter<String>  {
     private final Context context;
     private final List<String> items;
     private RoomsDbAdapter mDbRoomHelper;
-    private HabitacionesReservasDbAdapter mDbRoomMixHelper;
+    private HabitacionesReservasDbAdapter mix;
 
     public ListViewAdapter(Context context, List<String> items) {
         super(context, R.layout.dropdown, items);
         this.context = context;
         this.items = items;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        // Return a unique ID for each row in the cursor
+        return position;
     }
 
     @Override
@@ -45,13 +51,15 @@ public class ListViewAdapter extends ArrayAdapter<String>  {
         List<DropDownData> dataList = new ArrayList<>();
         Cursor cursor = mDbRoomHelper.fetchAllHabitaciones();
         while (cursor.moveToNext()) {
-            String id = cursor.getString(cursor.getColumnIndexOrThrow(mDbRoomHelper.KEY_ROWID));
-            String name = cursor.getString(cursor.getColumnIndexOrThrow(mDbRoomHelper.KEY_NOMBRE));
+            String id = cursor.getString(cursor.getColumnIndexOrThrow(RoomsDbAdapter.KEY_ROWID));
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(RoomsDbAdapter.KEY_NOMBRE));
             dataList.add(new DropDownData(id, name));
+
         }
         ArrayAdapter<DropDownData> spinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, dataList);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
+
 
         return convertView;
     }
