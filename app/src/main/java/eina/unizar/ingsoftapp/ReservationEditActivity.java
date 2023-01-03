@@ -38,7 +38,8 @@ public class ReservationEditActivity extends AppCompatActivity {
     private Long mRowId;
     private ListView rooms;
     private DatePickerDialog picker;
-    private List<String> items;
+    private List<String> itemsID;
+    private List<String> itemsOcupacion;
     private Cursor cursor;
 
     @Override
@@ -73,8 +74,8 @@ public class ReservationEditActivity extends AppCompatActivity {
         mFechaSalidaText.setInputType(InputType.TYPE_NULL);
 
         // Declaración de la lista que contiene el desplegable
-        items = new ArrayList<>();
-
+        itemsID = new ArrayList<>();
+        itemsOcupacion = new ArrayList<>();
 
         mRowId = (savedInstanceState == null )?null :
                 (Long)savedInstanceState.getSerializable(ReservationDbAdapter.KEY_ROWID ) ;
@@ -94,7 +95,8 @@ public class ReservationEditActivity extends AppCompatActivity {
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                mDbRoomMixHelper.createHabitacionReserva(1, 1, "2");
+                // Bucle que lee la lista de habitaciones y almacena en la BD las habitaciones para una reserva,
+                // si la reserva ya existia se actualiza y sino se crea
                 for (int i = 0; i < rooms.getCount(); i++) {
                     View listItem = rooms.getChildAt(i);
                     Spinner field1 = listItem.findViewById(R.id.spinner);
@@ -125,17 +127,18 @@ public class ReservationEditActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // Cuando se clica el botón añadir se insertara un elemento de la lista y se creara en la BD
                 cursor = mDbRoomHelper.fetchAllHabitaciones();
-                if (cursor.moveToNext()) {
+                if(cursor.moveToNext()) {
                     String id = cursor.getString(cursor.getColumnIndexOrThrow(RoomsDbAdapter.KEY_ROWID));
-                    items.add(id);
-                }
-                ListViewAdapter adapter = new ListViewAdapter(ReservationEditActivity.this, items);
-                rooms.setAdapter(adapter);
-                // Se ha añadido un elemento a la lista y lo guardamso en la BD, si no esta creado se crea y sino se actualiza
+                    String ocupacion = cursor.getString(cursor.getColumnIndexOrThrow(RoomsDbAdapter.KEY_CAPACIDAD));
+                    itemsID.add(id);
+                    itemsOcupacion.add(ocupacion);
+                    mDbRoomMixHelper.createHabitacionReserva(Long.parseLong(id), mRowId, ocupacion);
 
+                    ListViewAdapter adapter = new ListViewAdapter(ReservationEditActivity.this, itemsID, itemsOcupacion);
+                    rooms.setAdapter(adapter);
+                }
             }
         });
 
@@ -178,24 +181,6 @@ public class ReservationEditActivity extends AppCompatActivity {
         });
     }
 
-    /*private void fillData(){
-        if ( mRowId != null ) {
-            Cursor cursorHabs = mDbRoomMixHelper.fetchAllHabitacionReserva(mRowId);
-            String[] from = new String[] {HabitacionesReservasDbAdapter.KEY_IDHABITACION};
-            int[] to = new int[] { R.id.spinner};
-            SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.dropdown, cursorHabs, from, to);
-
-            List<String> data = new ArrayList<>();
-            while (cursorHabs.moveToNext()) {
-                String id = cursorHabs.getString(cursorHabs.getColumnIndexOrThrow(HabitacionesReservasDbAdapter.KEY_IDHABITACION));
-                data.add(id);
-            }
-            ListViewAdapter adapter = new ListViewAdapter(ReservationEditActivity.this, data);
-
-            rooms.setAdapter(adapter);
-        }
-
-    }*/
 
     private void populateFields () throws SQLException {
         if ( mRowId != null ) {
@@ -212,10 +197,13 @@ public class ReservationEditActivity extends AppCompatActivity {
             if (cursorHabs.moveToFirst()) {
                 do {
                     String id = cursorHabs.getString(cursorHabs.getColumnIndexOrThrow(HabitacionesReservasDbAdapter.KEY_IDHABITACION));
-                    items.add(id);
+                    String ocupacion = cursorHabs.getString(cursorHabs.getColumnIndexOrThrow(HabitacionesReservasDbAdapter.KEY_OCUPACION));
+                    itemsID.add(id);
+                    itemsOcupacion.add(ocupacion);
                 } while (cursorHabs.moveToNext());
             }
-            ListViewAdapter adapter = new ListViewAdapter(ReservationEditActivity.this, items);
+
+            ListViewAdapter adapter = new ListViewAdapter(ReservationEditActivity.this, itemsID, itemsOcupacion);
             rooms.setAdapter(adapter);
         }
     }
@@ -265,22 +253,7 @@ public class ReservationEditActivity extends AppCompatActivity {
         } else {
             mDbReservationHelper.updateReserva( mRowId , nombre , telefono, fechaEntrada, fechaSalida, precio );
         }
-        // Bucle que lee la lista de habitaciones y almacena en la BD las habitaciones para una reserva,
-        // si la reserva ya existia se actualiza y sino se crea
-        for (int i = 0; i < rooms.getCount(); i++) {
-            View listItem = rooms.getChildAt(i);
-            Spinner field1 = listItem.findViewById(R.id.spinner);
-            EditText field2 = listItem.findViewById(R.id.ocupacion);
-            DropDownData data = (DropDownData) field1.getSelectedItem();
-            long field1Value = Long.parseLong(data.getId());
-            String field2Value = field2.getText().toString();
-            // Do something with the values of field1 and field2
-            if ( mDbRoomMixHelper.exiteHabitacionReserva(field1Value, mRowId ) ) {
-                mDbRoomMixHelper.updateHabitacionReserva( field1Value, mRowId , field2Value );
-            } else {
-                mDbRoomMixHelper.createHabitacionReserva(field1Value, mRowId, field2Value);
-            }
-        }
+
     }
 
 }

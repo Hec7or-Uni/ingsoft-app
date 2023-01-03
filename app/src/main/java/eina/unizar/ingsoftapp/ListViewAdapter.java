@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -16,14 +17,16 @@ import java.util.List;
 public class ListViewAdapter extends ArrayAdapter<String>  {
 
     private final Context context;
-    private final List<String> items;
+    private final List<String> itemsID;
+    private final List<String> itemsOcupacion;
     private RoomsDbAdapter mDbRoomHelper;
     private HabitacionesReservasDbAdapter mix;
 
-    public ListViewAdapter(Context context, List<String> items) {
-        super(context, R.layout.dropdown, items);
+    public ListViewAdapter(Context context, List<String> itemsID, List<String> itemsOcupacion ) {
+        super(context, R.layout.dropdown, itemsID);
         this.context = context;
-        this.items = items;
+        this.itemsID = itemsID;
+        this.itemsOcupacion = itemsOcupacion;
     }
 
     @Override
@@ -47,6 +50,8 @@ public class ListViewAdapter extends ArrayAdapter<String>  {
         mDbRoomHelper.open();
         // Set up the Spinner
         Spinner spinner = convertView.findViewById(R.id.spinner);
+        EditText ocupacion = convertView.findViewById(R.id.ocupacion);
+
 
         List<DropDownData> dataList = new ArrayList<>();
         Cursor cursor = mDbRoomHelper.fetchAllHabitaciones();
@@ -60,6 +65,8 @@ public class ListViewAdapter extends ArrayAdapter<String>  {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
 
+        spinner.setSelection(Integer.parseInt(itemsID.get(position))-1);
+        ocupacion.setText(itemsOcupacion.get(position));
 
         return convertView;
     }
