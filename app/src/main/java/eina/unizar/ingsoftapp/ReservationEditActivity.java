@@ -139,7 +139,6 @@ public class ReservationEditActivity extends AppCompatActivity {
                     String ocupacion = cursor.getString(cursor.getColumnIndexOrThrow(RoomsDbAdapter.KEY_CAPACIDAD));
                     itemsID.add(id);
                     itemsOcupacion.add(ocupacion);
-                    mDbRoomMixHelper.createHabitacionReserva(Long.parseLong(id), mRowId, ocupacion);
 
                     ListViewAdapter adapter = new ListViewAdapter(ReservationEditActivity.this, itemsID, itemsOcupacion);
                     rooms.setAdapter(adapter);
