@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import eina.unizar.send.SendAbstractionImpl;
+
 public class ReservationEditActivity extends AppCompatActivity {
     // Database
     private RoomsDbAdapter mDbRoomHelper;
@@ -100,7 +102,10 @@ public class ReservationEditActivity extends AppCompatActivity {
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-
+                Cursor cursorCli = mDbReservationHelper.fetchReserva(mRowId);
+                String client = cursorCli.getString(cursorCli.getColumnIndexOrThrow(ReservationDbAdapter.KEY_NOMBRE));
+                SendAbstractionImpl Sender = new SendAbstractionImpl(ReservationEditActivity.this, "SMS");
+                Sender.send(client, "Reserva confirmada");
                 setResult(RESULT_OK);
                 finish();
             }
