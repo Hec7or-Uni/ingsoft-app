@@ -100,22 +100,7 @@ public class ReservationEditActivity extends AppCompatActivity {
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                // Bucle que lee la lista de habitaciones y almacena en la BD las habitaciones para una reserva,
-                // si la reserva ya existia se actualiza y sino se crea
-                for (int i = 0; i < rooms.getCount(); i++) {
-                    View listItem = rooms.getChildAt(i);
-                    Spinner field1 = listItem.findViewById(R.id.spinner);
-                    EditText field2 = listItem.findViewById(R.id.ocupacion);
-                    DropDownData data = (DropDownData) field1.getSelectedItem();
-                    long field1Value = Long.parseLong(data.getId());
-                    String field2Value = field2.getText().toString();
-                    // Do something with the values of field1 and field2
-                    if ( mDbRoomMixHelper.exiteHabitacionReserva(field1Value, mRowId ) ) {
-                        mDbRoomMixHelper.updateHabitacionReserva( field1Value, mRowId , field2Value );
-                    } else {
-                        mDbRoomMixHelper.createHabitacionReserva(field1Value, mRowId, field2Value);
-                    }
-                }
+
                 setResult(RESULT_OK);
                 finish();
             }
@@ -255,6 +240,23 @@ public class ReservationEditActivity extends AppCompatActivity {
             }
         } else {
             mDbReservationHelper.updateReserva( mRowId , nombre , telefono, fechaEntrada, fechaSalida, precio );
+        }
+
+        // Bucle que lee la lista de habitaciones y almacena en la BD las habitaciones para una reserva,
+        // si la reserva ya existia se actualiza y sino se crea
+        for (int i = 0; i < rooms.getCount(); i++) {
+            View listItem = rooms.getChildAt(i);
+            Spinner field1 = listItem.findViewById(R.id.spinner);
+            EditText field2 = listItem.findViewById(R.id.ocupacion);
+            DropDownData data = (DropDownData) field1.getSelectedItem();
+            long field1Value = Long.parseLong(data.getId());
+            String field2Value = field2.getText().toString();
+            // Do something with the values of field1 and field2
+            if ( mDbRoomMixHelper.exiteHabitacionReserva(field1Value, mRowId ) ) {
+                mDbRoomMixHelper.updateHabitacionReserva( field1Value, mRowId , field2Value );
+            } else {
+                mDbRoomMixHelper.createHabitacionReserva(field1Value, mRowId, field2Value);
+            }
         }
 
     }
