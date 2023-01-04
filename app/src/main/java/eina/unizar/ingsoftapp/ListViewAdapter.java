@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ public class ListViewAdapter extends ArrayAdapter<String>  {
         // References
         Spinner spinner = convertView.findViewById(R.id.spinner);
         EditText ocupacion = convertView.findViewById(R.id.ocupacion);
+
 
         // Database connection
         mDbRoomHelper = new RoomsDbAdapter( context);

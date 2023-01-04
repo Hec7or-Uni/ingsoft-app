@@ -28,12 +28,12 @@
         android:text="4"
         android:textColor="@color/black"/>
 
-    <ImageButton
+   <!-- <ImageButton
         android:layout_width="50dp"
         android:id="@+id/delete_room_id"
         android:layout_height="match_parent"
         android:src="@drawable/exit"
         android:background="@null"
         android:gravity="center"
-        android:onClick="onClick" />
+        android:onClick="onClick" />-->
 </LinearLayout>

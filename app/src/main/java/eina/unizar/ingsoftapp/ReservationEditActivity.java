@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -118,6 +119,7 @@ public class ReservationEditActivity extends AppCompatActivity {
             }
 
         });
+
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -256,12 +258,17 @@ public class ReservationEditActivity extends AppCompatActivity {
             DropDownData data = (DropDownData) field1.getSelectedItem();
             long field1Value = Long.parseLong(data.getId());
             String field2Value = field2.getText().toString();
-            // Do something with the values of field1 and field2
-            if ( mDbRoomMixHelper.exiteHabitacionReserva(field1Value, mRowId ) ) {
-                mDbRoomMixHelper.updateHabitacionReserva( field1Value, mRowId , field2Value );
-            } else {
-                mDbRoomMixHelper.createHabitacionReserva(field1Value, mRowId, field2Value);
+            // Do something with the values of field1 and
+            if (Integer.parseInt(field2Value) <= 0){
+                mDbRoomMixHelper.deleteHabitacionReserva( field1Value, mRowId);
+            } else{
+                if ( mDbRoomMixHelper.exiteHabitacionReserva(field1Value, mRowId ) ) {
+                    mDbRoomMixHelper.updateHabitacionReserva( field1Value, mRowId , field2Value );
+                } else {
+                    mDbRoomMixHelper.createHabitacionReserva(field1Value, mRowId, field2Value);
+                }
             }
+
         }
 
     }
