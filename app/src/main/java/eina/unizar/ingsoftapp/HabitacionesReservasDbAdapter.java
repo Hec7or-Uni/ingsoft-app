@@ -97,9 +97,11 @@ public class HabitacionesReservasDbAdapter {
 
     public boolean exiteHabitacionReserva(long idHabitacion, long idReserva  ) {
 
-        return mDb.query(true, DATABASE_TABLE, new String[] {KEY_IDHABITACION, KEY_IDRESERVA, KEY_OCUPACION}, KEY_IDHABITACION + "=" + idHabitacion+ " AND " +
+        Cursor mCursor = mDb.query(true, DATABASE_TABLE, new String[] {KEY_IDHABITACION, KEY_IDRESERVA, KEY_OCUPACION}, KEY_IDHABITACION + "=" + idHabitacion+ " AND " +
                         KEY_IDRESERVA + "=" + idReserva, null,
-                null, null, null, null) != null;
+                null, null, null, null);
+        return mCursor.getCount()>0;
+
     }
 
     /**
