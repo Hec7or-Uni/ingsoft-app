@@ -1,6 +1,10 @@
 package eina.unizar.ingsoftapp;
 
+/**
+ *
+ */
 public class DropDownData {
+
     private String id;
     private String name;
 
@@ -21,5 +25,4 @@ public class DropDownData {
     public String toString() {
         return name;
     }
-
 }

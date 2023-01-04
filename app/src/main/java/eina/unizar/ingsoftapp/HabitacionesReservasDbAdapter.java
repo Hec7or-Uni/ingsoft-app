@@ -25,16 +25,14 @@ import java.util.List;
 public class HabitacionesReservasDbAdapter {
 
     public static final String KEY_IDHABITACION = "idHabitacion";
-    public static final String KEY_IDRESERVA = "idReserva";
-    public static final String KEY_OCUPACION = "ocupacion";
+    public static final String KEY_IDRESERVA    = "idReserva";
+    public static final String KEY_OCUPACION    = "ocupacion";
 
+    private static final String DATABASE_TABLE = "habitaciones_reservas";
+    private final Context mCtx;
 
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
-
-    private static final String DATABASE_TABLE = "habitaciones_reservas";
-
-    private final Context mCtx;
 
     /**
      * Constructor - takes the context to allow the database to be
@@ -76,6 +74,7 @@ public class HabitacionesReservasDbAdapter {
      */
     public long createHabitacionReserva(long idHabitacion, long idReserva, String ocupacion) {
         ContentValues initialValues = new ContentValues();
+
         initialValues.put(KEY_IDHABITACION, idHabitacion);
         initialValues.put(KEY_IDRESERVA, idReserva);
         initialValues.put(KEY_OCUPACION, ocupacion);
@@ -90,7 +89,7 @@ public class HabitacionesReservasDbAdapter {
      * @param idReserva id of note to delete
      * @return true if deleted, false otherwise
      */
-    public boolean deleteHabitacionReserva(long idHabitacion, long idReserva  ) {
+    public boolean deleteHabitacionReserva(long idHabitacion, long idReserva) {
 
         return mDb.delete(DATABASE_TABLE, KEY_IDHABITACION + "=" + idHabitacion + " AND " +
                 KEY_IDRESERVA + "=" + idReserva, null) > 0;
@@ -112,26 +111,18 @@ public class HabitacionesReservasDbAdapter {
      * @throws SQLException if note could not be found/retrieved
      */
     public Cursor fetchHabitacionReserva(long idHabitacion, long idReserva) throws SQLException {
-
-        Cursor mCursor =
-
-                mDb.query(true, DATABASE_TABLE, new String[] {KEY_IDHABITACION, KEY_IDRESERVA, KEY_OCUPACION}, KEY_IDHABITACION + "=" + idHabitacion+ " AND " +
+        Cursor mCursor = mDb.query(true, DATABASE_TABLE, new String[] {KEY_IDHABITACION, KEY_IDRESERVA, KEY_OCUPACION}, KEY_IDHABITACION + "=" + idHabitacion+ " AND " +
                                 KEY_IDRESERVA + "=" + idReserva, null,
                         null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
         return mCursor;
-
     }
 
     public Cursor fetchAllHabitacionReserva(long idReserva) throws SQLException {
-
         return mDb.query(true, DATABASE_TABLE, new String[] {KEY_IDHABITACION, KEY_IDRESERVA, KEY_OCUPACION}, KEY_IDRESERVA + "=" + idReserva, null,
                         null, null, null, null);
-
-
-
     }
 
     public boolean updateHabitacionReserva(long idHabitacion, long idReserva, String ocupacion) {
@@ -139,7 +130,6 @@ public class HabitacionesReservasDbAdapter {
         initialValues.put(KEY_IDHABITACION, idHabitacion);
         initialValues.put(KEY_IDRESERVA, idReserva);
         initialValues.put(KEY_OCUPACION, ocupacion);
-
 
         return mDb.update(DATABASE_TABLE, initialValues, KEY_IDHABITACION + "=" + idHabitacion + " AND " + KEY_IDRESERVA + "=" + idReserva , null) > 0;
     }

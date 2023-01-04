@@ -43,15 +43,13 @@ public class ListViewAdapter extends ArrayAdapter<String>  {
             convertView = inflater.inflate(R.layout.dropdown, parent, false);
         }
 
-        // Set the text for the item
-        //TextView textView = convertView.findViewById(R.id.text);
-        //textView.setText(items.get(position));
-        mDbRoomHelper = new RoomsDbAdapter( context);
-        mDbRoomHelper.open();
-        // Set up the Spinner
+        // References
         Spinner spinner = convertView.findViewById(R.id.spinner);
         EditText ocupacion = convertView.findViewById(R.id.ocupacion);
 
+        // Database connection
+        mDbRoomHelper = new RoomsDbAdapter( context);
+        mDbRoomHelper.open();
 
         List<DropDownData> dataList = new ArrayList<>();
         Cursor cursor = mDbRoomHelper.fetchAllHabitaciones();
@@ -59,12 +57,12 @@ public class ListViewAdapter extends ArrayAdapter<String>  {
             String id = cursor.getString(cursor.getColumnIndexOrThrow(RoomsDbAdapter.KEY_ROWID));
             String name = cursor.getString(cursor.getColumnIndexOrThrow(RoomsDbAdapter.KEY_NOMBRE));
             dataList.add(new DropDownData(id, name));
-
         }
         ArrayAdapter<DropDownData> spinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, dataList);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
 
+        // Set values
         spinner.setSelection(Integer.parseInt(itemsID.get(position))-1);
         ocupacion.setText(itemsOcupacion.get(position));
 

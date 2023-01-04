@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 public class RoomActivity extends AppCompatActivity {
+
     private RoomsDbAdapter mDbHelper;
     ListView rooms;
 
@@ -21,11 +22,10 @@ public class RoomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.room_activity_main);
 
-
         // References
         Button res = findViewById(R.id.reservations);
         Button hab = findViewById(R.id.rooms);
-        Button info = findViewById(R.id.add);
+        Button addNew = findViewById(R.id.add);
         Button id = findViewById(R.id.id);
         Button ocs = findViewById(R.id.ocs);
         Button price = findViewById(R.id.price);
@@ -37,36 +37,38 @@ public class RoomActivity extends AppCompatActivity {
         res.setBackgroundColor(Color.parseColor("#FFFFFF"));
         res.setTextColor(Color.parseColor("#000000"));
 
-        //Leer de la base de datos
+        // Database Connection
         mDbHelper = new RoomsDbAdapter(this);
         mDbHelper.open();
         fillData();
 
-        // Listeners
-        Intent intent = new Intent(RoomActivity.this, ReservationActivity.class);
+        // Switch Activity on Event
+        Intent toReservation = new Intent(RoomActivity.this, ReservationActivity.class);
         res.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(intent);
+                startActivity(toReservation);
             }
         });
 
-        Intent intent1 = new Intent(RoomActivity.this, RoomEditActivity.class);
-        info.setOnClickListener(new View.OnClickListener() {
+        Intent toCreateRoom = new Intent(RoomActivity.this, RoomEditActivity.class);
+        addNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(intent1, 0);
+                startActivityForResult(toCreateRoom, 0);
             }
         });
 
+        Intent toEditRoom = new Intent(this, RoomEditActivity.class);
         rooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Start the new activity here
-                editNote(id);
+                toEditRoom.putExtra(RoomsDbAdapter.KEY_ROWID, id);
+                startActivityForResult(toEditRoom, 1);
             }
         });
 
+        // Events for filters
         id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,14 +111,5 @@ public class RoomActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         fillData();
-    }
-
-    /**
-     * Crea el objeto Intent asociado a editar una habitacion
-     */
-    protected void editNote(long id) {
-        Intent i = new Intent(this, RoomEditActivity.class);
-        i.putExtra(RoomsDbAdapter.KEY_ROWID, id);
-        startActivityForResult(i, 1);
     }
 }

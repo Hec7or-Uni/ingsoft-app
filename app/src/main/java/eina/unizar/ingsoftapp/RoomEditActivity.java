@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class RoomEditActivity extends AppCompatActivity {
+
     private RoomsDbAdapter mDbHelper ;
     private EditText mNombreText;
     private EditText mDescripcionText;
@@ -21,10 +22,9 @@ public class RoomEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Hace que la actividad se comporte como un modal
-        setContentView(R.layout.edit_room); //indicar el layout correspondiente
+        setContentView(R.layout.edit_room);
 
-        // Database
+        // Database Connection
         mDbHelper = new RoomsDbAdapter( this );
         mDbHelper.open();
 
@@ -42,14 +42,14 @@ public class RoomEditActivity extends AppCompatActivity {
         // Mods
         setTitle(R.string.edit_room);
 
-        mRowId = (savedInstanceState == null )? null :
+        mRowId = (savedInstanceState == null) ? null :
                 (Long)savedInstanceState.getSerializable(RoomsDbAdapter.KEY_ROWID ) ;
-        if(mRowId == null){
+        if (mRowId == null) {
             Bundle extras = getIntent().getExtras();
             mRowId = (extras != null)?extras.getLong(RoomsDbAdapter.KEY_ROWID):null ;
         }
 
-        // Listeners
+        // Switch Activity on Event
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,30 +62,25 @@ public class RoomEditActivity extends AppCompatActivity {
                 setResult(RESULT_OK);
                 finish();
             }
-
         });
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                boolean eliminado = mDbHelper.deleteHabitacion(mRowId );
-                if(eliminado){
-                    finish();
-                }
-
+                boolean eliminado = mDbHelper.deleteHabitacion(mRowId);
+                if (eliminado) { finish(); }
             }
         });
     }
 
     private void populateFields () {
-        if ( mRowId != null ) {
-            Cursor note = mDbHelper.fetchHabitacion( mRowId ) ;
-            startManagingCursor( note ) ;
-            mNombreText.setText( note.getString(note.getColumnIndexOrThrow( RoomsDbAdapter.KEY_NOMBRE ) )) ;
-            mDescripcionText.setText(note.getString(note.getColumnIndexOrThrow( RoomsDbAdapter.KEY_DESCRIPCION ) ) ) ;
-            mCapacidadText.setText(note.getString(note.getColumnIndexOrThrow( RoomsDbAdapter.KEY_CAPACIDAD ) ) ) ;
-            mPrecioText.setText(note.getString(note.getColumnIndexOrThrow( RoomsDbAdapter.KEY_PRECIO ) ) ) ;
-            mPorcentajeEstraText.setText(note.getString(note.getColumnIndexOrThrow( RoomsDbAdapter.KEY_PORCENTAJEEXTRA ) ) ) ;
-
+        if (mRowId != null) {
+            Cursor note = mDbHelper.fetchHabitacion(mRowId);
+            startManagingCursor(note);
+            mNombreText.setText(note.getString(note.getColumnIndexOrThrow(RoomsDbAdapter.KEY_NOMBRE)));
+            mDescripcionText.setText(note.getString(note.getColumnIndexOrThrow(RoomsDbAdapter.KEY_DESCRIPCION)));
+            mCapacidadText.setText(note.getString(note.getColumnIndexOrThrow(RoomsDbAdapter.KEY_CAPACIDAD)));
+            mPrecioText.setText(note.getString(note.getColumnIndexOrThrow(RoomsDbAdapter.KEY_PRECIO)));
+            mPorcentajeEstraText.setText(note.getString(note.getColumnIndexOrThrow(RoomsDbAdapter.KEY_PORCENTAJEEXTRA)));
         }
     }
 
@@ -117,12 +112,9 @@ public class RoomEditActivity extends AppCompatActivity {
 
         if ( mRowId == null ) {
             long id = mDbHelper.createHabitacion( nombre , descripcion, capacidad, precio, porcentajeExtra );
-            if ( id > 0) {
-                mRowId = id ;
-            }
+            if (id > 0) { mRowId = id; }
         } else {
             mDbHelper.updateHabitacion( mRowId , nombre , descripcion, capacidad, precio, porcentajeExtra );
         }
     }
-
 }

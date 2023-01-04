@@ -27,27 +27,33 @@ import java.util.Calendar;
 import java.util.List;
 
 public class ReservationEditActivity extends AppCompatActivity {
+    // Database
     private RoomsDbAdapter mDbRoomHelper;
     private ReservationDbAdapter mDbReservationHelper;
     private HabitacionesReservasDbAdapter mDbRoomMixHelper;
+    private Cursor cursor;
+
+    // Fields
     private EditText mNombreText;
     private EditText mTelefonoText;
     private EditText mFechaEntradaText;
     private EditText mFechaSalidaText;
     private TextView mPrecioText;
+
+    // ---
     private Long mRowId;
     private ListView rooms;
     private DatePickerDialog picker;
     private List<String> itemsID;
     private List<String> itemsOcupacion;
-    private Cursor cursor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_reservation); //indicar el layout correspondiente
+        setContentView(R.layout.edit_reservation);
 
-        //Database
+        // Database
         mDbReservationHelper = new ReservationDbAdapter( this );
         mDbReservationHelper.open();
         mDbRoomHelper = new RoomsDbAdapter( this );
@@ -68,7 +74,6 @@ public class ReservationEditActivity extends AppCompatActivity {
         Button add = findViewById(R.id.addRoom);
         rooms = (ListView) findViewById(R.id.list_rooms_2);
 
-        //fillData();
         // mods
         mFechaEntradaText.setInputType(InputType.TYPE_NULL);
         mFechaSalidaText.setInputType(InputType.TYPE_NULL);
@@ -219,7 +224,6 @@ public class ReservationEditActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         //fillData();
-
     }
 
     @Override

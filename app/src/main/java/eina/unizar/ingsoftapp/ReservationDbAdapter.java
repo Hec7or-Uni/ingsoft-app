@@ -19,19 +19,18 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public class ReservationDbAdapter {
 
-    public static final String KEY_NOMBRE = "nombreCliente";
-    public static final String KEY_TELEFONO = "telefono";
+    public static final String KEY_NOMBRE       = "nombreCliente";
+    public static final String KEY_TELEFONO     = "telefono";
     public static final String KEY_FECHAENTRADA = "fechaEntrada";
-    public static final String KEY_FECHASALIDA = "fechaSalida";
-    public static final String KEY_PRECIO = "precio";
-    public static final String KEY_ROWID = "_id";
+    public static final String KEY_FECHASALIDA  = "fechaSalida";
+    public static final String KEY_PRECIO       = "precio";
+    public static final String KEY_ROWID        = "_id";
+
+    private static final String DATABASE_TABLE = "reservas";
+    private final Context mCtx;
 
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
-
-    private static final String DATABASE_TABLE = "reservas";
-
-    private final Context mCtx;
 
     /**
      * Constructor - takes the context to allow the database to be
@@ -62,7 +61,6 @@ public class ReservationDbAdapter {
         mDbHelper.close();
     }
 
-
     /**
      * Create a new note using the title and body provided. If the note is
      * successfully created return the new rowId for that note, otherwise return
@@ -75,7 +73,8 @@ public class ReservationDbAdapter {
      * @param precio the body of the note
      * @return rowId or -1 if failed
      */
-    public long createReserva(String nombreCliente, String telefono, String fechaEntrada, String fechaSalida, String precio) {
+    public long createReserva(String nombreCliente, String telefono, String fechaEntrada,
+                              String fechaSalida, String precio) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_NOMBRE, nombreCliente);
         initialValues.put(KEY_TELEFONO, telefono);
@@ -93,7 +92,6 @@ public class ReservationDbAdapter {
      * @return true if deleted, false otherwise
      */
     public boolean deleteReserva(long rowId) {
-
         return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
     }
 
@@ -103,9 +101,9 @@ public class ReservationDbAdapter {
      * @return Cursor over all notes
      */
     public Cursor fetchAllReservas() {
-
         return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NOMBRE,
-                KEY_TELEFONO, KEY_FECHAENTRADA, KEY_FECHASALIDA, KEY_PRECIO }, null, null, null, null, null);
+                KEY_TELEFONO, KEY_FECHAENTRADA, KEY_FECHASALIDA, KEY_PRECIO },
+                null, null, null, null, null);
     }
 
     /**
@@ -114,18 +112,20 @@ public class ReservationDbAdapter {
      * @return Cursor over all notes
      */
     public Cursor sortReservas(int type) {
-        switch (type){
+        switch (type) {
             case 1:
                 return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NOMBRE,
-                        KEY_TELEFONO, KEY_FECHAENTRADA, KEY_FECHASALIDA, KEY_PRECIO }, null, null, null, null,KEY_NOMBRE );
+                        KEY_TELEFONO, KEY_FECHAENTRADA, KEY_FECHASALIDA, KEY_PRECIO },
+                        null, null, null, null, KEY_NOMBRE );
             case 2:
                 return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NOMBRE,
-                        KEY_TELEFONO, KEY_FECHAENTRADA, KEY_FECHASALIDA, KEY_PRECIO }, null, null, null, null,KEY_TELEFONO );
+                        KEY_TELEFONO, KEY_FECHAENTRADA, KEY_FECHASALIDA, KEY_PRECIO },
+                        null, null, null, null,KEY_TELEFONO );
             default:
                 return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_NOMBRE,
-                        KEY_TELEFONO, KEY_FECHAENTRADA, KEY_FECHASALIDA, KEY_PRECIO }, null, null, null, null,KEY_FECHAENTRADA );
+                        KEY_TELEFONO, KEY_FECHAENTRADA, KEY_FECHASALIDA, KEY_PRECIO },
+                        null, null, null, null,KEY_FECHAENTRADA );
         }
-
     }
 
     /**
@@ -136,17 +136,16 @@ public class ReservationDbAdapter {
      * @throws SQLException if note could not be found/retrieved
      */
     public Cursor fetchReserva(long rowId) throws SQLException {
-
         Cursor mCursor =
-
-                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID,
-                                KEY_NOMBRE, KEY_TELEFONO, KEY_FECHAENTRADA, KEY_FECHASALIDA, KEY_PRECIO}, KEY_ROWID + "=" + rowId, null,
-                        null, null, null, null);
+            mDb.query(true, DATABASE_TABLE, new String[] {
+                    KEY_ROWID, KEY_NOMBRE, KEY_TELEFONO, KEY_FECHAENTRADA,
+                    KEY_FECHASALIDA, KEY_PRECIO
+                }, KEY_ROWID + "=" + rowId, null,
+                    null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
         return mCursor;
-
     }
 
     /**
@@ -162,7 +161,8 @@ public class ReservationDbAdapter {
      * @param precio the body of the note
      * @return true if the note was successfully updated, false otherwise
      */
-    public boolean updateReserva(long rowId, String nombreCliente, String telefono, String fechaEntrada, String fechaSalida, String precio) {
+    public boolean updateReserva(long rowId, String nombreCliente, String telefono,
+                                 String fechaEntrada, String fechaSalida, String precio) {
         ContentValues args = new ContentValues();
         args.put(KEY_NOMBRE, nombreCliente);
         args.put(KEY_TELEFONO, telefono);
