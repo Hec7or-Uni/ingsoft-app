@@ -18,13 +18,17 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import eina.unizar.send.SendAbstractionImpl;
@@ -103,10 +107,10 @@ public class ReservationEditActivity extends AppCompatActivity {
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Cursor cursorCli = mDbReservationHelper.fetchReserva(mRowId);
+                /*Cursor cursorCli = mDbReservationHelper.fetchReserva(mRowId);
                 String client = cursorCli.getString(cursorCli.getColumnIndexOrThrow(ReservationDbAdapter.KEY_NOMBRE));
                 SendAbstractionImpl Sender = new SendAbstractionImpl(ReservationEditActivity.this, "SMS");
-                Sender.send(client, "Reserva confirmada");
+                Sender.send(client, "Reserva confirmada");*/
                 setResult(RESULT_OK);
                 finish();
             }
@@ -233,6 +237,29 @@ public class ReservationEditActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Devuelve true si la fecha de entrada es anterior a la fecha de salida, en caso contrario devuelve fasle
+     * @param fechaEntrada
+     * @param fechaSalida
+     * @return
+     */
+    private boolean fechasCorrectas( String fechaEntrada, String fechaSalida){
+        try {
+            // Crea un formateador de fecha con el formato especificado
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+            // Convierte las fechas de cadena a objetos Date
+            Date d1 = sdf.parse(fechaEntrada);
+            Date d2 = sdf.parse(fechaSalida);
+
+            // Compara las fechas
+            return d1.before(d2);
+        } catch (ParseException e) {
+            // En caso de error al parsear las fechas, se devuelve false
+            return false;
+        }
+    }
+
     private void saveState () {
         String nombre = mNombreText.getText().toString();
         String telefono = mTelefonoText.getText().toString();
@@ -240,37 +267,38 @@ public class ReservationEditActivity extends AppCompatActivity {
         String fechaSalida = mFechaSalidaText.getText().toString();
         String precio = mPrecioText.getText().toString();
 
-        if ( mRowId == null ) {
-            long id = mDbReservationHelper.createReserva( nombre , telefono, fechaEntrada, fechaSalida, precio );
-            if ( id > 0) {
-                mRowId = id ;
+        if (!(nombre != null && !nombre.equals("") && telefono != null && telefono.length() > 0 && fechasCorrectas(fechaEntrada,fechaSalida))) {
+            Toast.makeText(getApplicationContext(),"Reserva no creada/modificada, campos inválidos",Toast.LENGTH_SHORT).show();
+        } else{
+            if ( mRowId == null ) {
+                long id = mDbReservationHelper.createReserva( nombre , telefono, fechaEntrada, fechaSalida, precio );
+                if ( id > 0) {
+                    mRowId = id ;
+                }
+            } else {
+                mDbReservationHelper.updateReserva( mRowId , nombre , telefono, fechaEntrada, fechaSalida, precio );
             }
-        } else {
-            mDbReservationHelper.updateReserva( mRowId , nombre , telefono, fechaEntrada, fechaSalida, precio );
-        }
-
-        // Bucle que lee la lista de habitaciones y almacena en la BD las habitaciones para una reserva,
-        // si la reserva ya existia se actualiza y sino se crea
-        for (int i = 0; i < rooms.getCount(); i++) {
-            View listItem = rooms.getChildAt(i);
-            Spinner field1 = listItem.findViewById(R.id.spinner);
-            EditText field2 = listItem.findViewById(R.id.ocupacion);
-            DropDownData data = (DropDownData) field1.getSelectedItem();
-            long field1Value = Long.parseLong(data.getId());
-            String field2Value = field2.getText().toString();
-            // Do something with the values of field1 and
-            if (Integer.parseInt(field2Value) <= 0){
-                mDbRoomMixHelper.deleteHabitacionReserva( field1Value, mRowId);
-            } else{
-                if ( mDbRoomMixHelper.exiteHabitacionReserva(field1Value, mRowId ) ) {
-                    mDbRoomMixHelper.updateHabitacionReserva( field1Value, mRowId , field2Value );
-                } else {
-                    mDbRoomMixHelper.createHabitacionReserva(field1Value, mRowId, field2Value);
+            // Bucle que lee la lista de habitaciones y almacena en la BD las habitaciones para una reserva,
+            // si la reserva ya existia se actualiza y sino se crea
+            for (int i = 0; i < rooms.getCount(); i++) {
+                View listItem = rooms.getChildAt(i);
+                Spinner field1 = listItem.findViewById(R.id.spinner);
+                EditText field2 = listItem.findViewById(R.id.ocupacion);
+                DropDownData data = (DropDownData) field1.getSelectedItem();
+                long field1Value = Long.parseLong(data.getId());
+                String field2Value = field2.getText().toString();
+                // Do something with the values of field1 and
+                if (Integer.parseInt(field2Value) <= 0){
+                    mDbRoomMixHelper.deleteHabitacionReserva( field1Value, mRowId);
+                } else{
+                    if ( mDbRoomMixHelper.exiteHabitacionReserva(field1Value, mRowId ) ) {
+                        mDbRoomMixHelper.updateHabitacionReserva( field1Value, mRowId , field2Value );
+                    } else {
+                        mDbRoomMixHelper.createHabitacionReserva(field1Value, mRowId, field2Value);
+                    }
                 }
             }
-
         }
-
     }
 
 }

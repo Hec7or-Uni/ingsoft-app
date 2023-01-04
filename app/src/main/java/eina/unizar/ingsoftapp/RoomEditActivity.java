@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -109,12 +110,17 @@ public class RoomEditActivity extends AppCompatActivity {
         String capacidad = mCapacidadText.getText().toString();
         String precio = mPrecioText.getText().toString();
         String porcentajeExtra = mPorcentajeEstraText.getText().toString();
-
-        if ( mRowId == null ) {
-            long id = mDbHelper.createHabitacion( nombre , descripcion, capacidad, precio, porcentajeExtra );
-            if (id > 0) { mRowId = id; }
-        } else {
-            mDbHelper.updateHabitacion( mRowId , nombre , descripcion, capacidad, precio, porcentajeExtra );
+        if (!(nombre != null && !nombre.equals("") && capacidad != null && capacidad.length() > 0 && precio != null
+                && Float.parseFloat(precio) > 0 && porcentajeExtra != null && Float.parseFloat(porcentajeExtra) > 0)) {
+            Toast.makeText(getApplicationContext(),"Habitación no creada/modificada, campos inválidos",Toast.LENGTH_SHORT).show();
+        } else{
+            if ( mRowId == null ) {
+                long id = mDbHelper.createHabitacion( nombre , descripcion, capacidad, precio, porcentajeExtra );
+                if (id > 0) { mRowId = id; }
+            } else {
+                mDbHelper.updateHabitacion( mRowId , nombre , descripcion, capacidad, precio, porcentajeExtra );
+            }
         }
+
     }
 }
