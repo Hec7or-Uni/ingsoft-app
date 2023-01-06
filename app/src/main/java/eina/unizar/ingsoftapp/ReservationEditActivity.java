@@ -267,11 +267,19 @@ public class ReservationEditActivity extends AppCompatActivity {
         String fechaEntrada = mFechaEntradaText.getText().toString();
         String fechaSalida = mFechaSalidaText.getText().toString();
         Double precioRooms = 0.0;
-        String precio;
+        String precio = "";
 
         if (!(nombre != null && !nombre.equals("") && telefono != null && telefono.length() > 0 && fechasCorrectas(fechaEntrada,fechaSalida))) {
             Toast.makeText(getApplicationContext(),"Reserva no creada/modificada, campos inválidos",Toast.LENGTH_SHORT).show();
         } else{
+            if ( mRowId == null ) {
+                long id = mDbReservationHelper.createReserva( nombre , telefono, fechaEntrada, fechaSalida, precio );
+                if ( id > 0) {
+                    mRowId = id ;
+                }
+            } else {
+                mDbReservationHelper.updateReserva( mRowId , nombre , telefono, fechaEntrada, fechaSalida, precio );
+            }
             // Bucle que lee la lista de habitaciones y almacena en la BD las habitaciones para una reserva,
             // si la reserva ya existia se actualiza y sino se crea
             for (int i = 0; i < rooms.getCount(); i++) {
@@ -300,16 +308,7 @@ public class ReservationEditActivity extends AppCompatActivity {
             DecimalFormat df = new DecimalFormat("#.##");
             precio = df.format(precioRooms);
             mPrecioText.setText(precio + " €");
-
-
-            if ( mRowId == null ) {
-                long id = mDbReservationHelper.createReserva( nombre , telefono, fechaEntrada, fechaSalida, precio );
-                if ( id > 0) {
-                    mRowId = id ;
-                }
-            } else {
-                mDbReservationHelper.updateReserva( mRowId , nombre , telefono, fechaEntrada, fechaSalida, precio );
-            }
+            mDbReservationHelper.updateReserva( mRowId , nombre , telefono, fechaEntrada, fechaSalida, precio );
         }
     }
 
