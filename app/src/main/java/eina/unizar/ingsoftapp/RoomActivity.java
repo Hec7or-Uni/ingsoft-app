@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class RoomActivity extends AppCompatActivity {
 
@@ -25,7 +26,7 @@ public class RoomActivity extends AppCompatActivity {
         // References
         Button res = findViewById(R.id.reservations);
         Button hab = findViewById(R.id.rooms);
-        Button addNew = findViewById(R.id.add);
+        FloatingActionButton addNew = findViewById(R.id.add);
         Button id = findViewById(R.id.id);
         Button ocs = findViewById(R.id.ocs);
         Button price = findViewById(R.id.price);

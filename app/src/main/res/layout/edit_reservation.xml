@@ -1,186 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:fillViewport="true"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_gravity="top"
-        android:paddingHorizontal="20dp"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/white"
         android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingVertical="15dp"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textSize="24dp"
-                android:textStyle="bold"
-                android:text="Reservas" />
 
-            <ImageButton
-                android:id="@+id/exit_reservation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/exit"
-                android:background="@null"
-                android:padding="10dp"
-                android:onClick="onClick" />
-        </LinearLayout>
         <LinearLayout
-            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:textSize="20dp"
-                android:textStyle="normal"
-                android:text="Cliente" />
-            <EditText
-                android:id="@+id/name_res"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Margarita Robles"
-                android:inputType="text"
-                android:background="#f8f8f8"
-                android:padding="8dp"
-                android:textColorHint="#000000" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:textSize="20dp"
-                android:textStyle="normal"
-                android:text="Teléfono" />
-            <EditText
-                android:id="@+id/phone_res"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:hint="669 80 32 12"
-                android:background="#f8f8f8"
-                android:padding="8dp"
-                android:textColorHint="#000000" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_gravity="top"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp">
+
             <LinearLayout
-                android:layout_marginTop="8dp"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_marginRight="5dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingVertical="15dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Reservas"
+                    android:textSize="24dp"
+                    android:textStyle="bold" />
+                <ImageButton
+                    android:id="@+id/exit_reservation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:onClick="onClick"
+                    android:padding="10dp"
+                    android:src="@drawable/exit" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
                     android:layout_marginBottom="4dp"
-                    android:textStyle="normal"
-                    android:text="Fecha entrada:" />
+                    android:text="Cliente"
+                    android:textSize="20dp"
+                    android:textStyle="normal" />
                 <EditText
-                    android:id="@+id/entry_date_res"
+                    android:id="@+id/name_res"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#f8f8f8"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/edit_text"
+                    android:elevation="10dp"
+                    android:hint="Margarita Robles"
+                    android:inputType="text"
                     android:padding="8dp"
                     android:textColorHint="#000000" />
             </LinearLayout>
+
             <LinearLayout
-                android:layout_marginTop="8dp"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_marginLeft="5dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
+                    android:layout_marginTop="-6dp"
                     android:layout_marginBottom="4dp"
-                    android:textStyle="normal"
-                    android:text="Fecha salida" />
+                    android:text="Teléfono"
+                    android:textSize="20dp"
+                    android:textStyle="normal" />
                 <EditText
-                    android:id="@+id/departure_date_res"
+                    android:id="@+id/phone_res"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#f8f8f8"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/edit_text"
+                    android:elevation="10dp"
+                    android:hint="669 80 32 12"
+                    android:inputType="phone"
                     android:padding="8dp"
                     android:textColorHint="#000000" />
             </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <Button
-                android:id="@+id/addRoom"
-                android:layout_weight="1"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:paddingVertical="15dp"
-                android:backgroundTint="@color/blue"
-                android:textColor="@color/white"
-                android:textAllCaps="false"
-                android:text="+ Habitación" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:layout_marginBottom="4dp"
-                android:textStyle="normal"
-                android:text="Habitaciones" />
-        </LinearLayout>
-        <ListView
-            android:id="@+id/list_rooms_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="85dp"/>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:paddingHorizontal="20dp"
-        android:layout_marginBottom="14dp"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/price_res"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:text="Fecha entrada:"
+                        android:textSize="20dp"
+                        android:textStyle="normal" />
+                    <EditText
+                        android:id="@+id/entry_date_res"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/inner_edit_text"
+                        android:padding="8dp"
+                        android:textColorHint="#000000" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:text="Fecha salida"
+                        android:textSize="20dp"
+                        android:textStyle="normal" />
+                    <EditText
+                        android:id="@+id/departure_date_res"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/inner_edit_text"
+                        android:padding="8dp"
+                        android:textColorHint="#000000" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/addRoom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_btns_blue"
+                    android:paddingVertical="15dp"
+                    android:text="+ Habitación"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="Habitaciones"
+                    android:textSize="20dp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/list_rooms_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="85dp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="bottom"
-            android:textSize="40dp"
-            android:layout_marginBottom="4dp"
-            android:textStyle="bold"
-            android:text="$184,95"
-            android:textColor="@color/blue"/>
-        <include
-            android:layout_gravity="bottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/edit_menu_reservations" />
-    </LinearLayout>
-</FrameLayout>
+            android:layout_marginBottom="14dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp">
+
+            <TextView
+                android:id="@+id/price_res"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="4dp"
+                android:gravity="center"
+                android:text="$184,95"
+                android:textColor="@color/blue"
+                android:textSize="40dp"
+                android:textStyle="bold" />
+
+            <include
+                layout="@layout/edit_menu_reservations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom" />
+        </LinearLayout>
+    </FrameLayout>
+</ScrollView>

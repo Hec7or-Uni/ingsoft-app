@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,7 +26,7 @@ public class ReservationActivity extends AppCompatActivity {
         // References
         Button res = findViewById(R.id.reservations);
         Button hab = findViewById(R.id.rooms);
-        Button addNew = findViewById(R.id.add_res);
+        FloatingActionButton addNew = findViewById(R.id.add);
         Button cli = findViewById(R.id.client);
         Button tel = findViewById(R.id.phone);
         Button date = findViewById(R.id.date);

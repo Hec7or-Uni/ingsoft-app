@@ -9,24 +9,28 @@
     android:paddingHorizontal="20dp"
     android:paddingVertical="10dp"
     android:orientation="horizontal">
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/delete_room"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
         android:paddingVertical="15dp"
-        android:backgroundTint="@color/red"
+        android:background="@drawable/rounded_btns_red"
         android:textColor="@color/white"
         android:textAllCaps="false"
         android:text="Eliminar" />
-    <Button
+    <!--    android:text="Eliminar"-->
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/save_room"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:background="@drawable/rounded_btns_black"
         android:textAllCaps="false"
         android:paddingVertical="15dp"
+        android:textColor="@color/white"
         android:text="Confirmar" />
+    <!--    android:text="Confirmar"-->
 </LinearLayout>

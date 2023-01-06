@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import androidx.appcompat.widget.AppCompatButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,7 +80,7 @@ public class ReservationEditActivity extends AppCompatActivity {
         ImageButton exitButton = (ImageButton) findViewById(R.id.exit_reservation);
         Button saveButton = (Button) findViewById(R.id.save_reservation);
         Button deleteButton = (Button) findViewById(R.id.delete_reservation);
-        Button add = findViewById(R.id.addRoom);
+        AppCompatButton add = findViewById(R.id.addRoom);
         rooms = (ListView) findViewById(R.id.list_rooms_2);
 
         // mods

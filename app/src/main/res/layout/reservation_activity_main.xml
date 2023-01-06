@@ -29,14 +29,15 @@
         android:paddingHorizontal="20dp"
         android:layout_marginBottom="14dp"
         android:orientation="vertical">
-        <Button
-            android:id="@+id/add_res"
-            android:text="Nueva Reserva"
-            android:textAllCaps="false"
-            android:paddingVertical="15dp"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_gravity="end"
+            android:layout_marginBottom="9dp"
             android:backgroundTint="@color/blue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:foreground="@drawable/add"
+            android:src="@drawable/add" />
         <include
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
