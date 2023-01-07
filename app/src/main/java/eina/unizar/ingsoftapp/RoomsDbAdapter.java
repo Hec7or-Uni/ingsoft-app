@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import eina.unizar.ingsoftapp.DatabaseHelper;
 
@@ -76,6 +77,16 @@ public class RoomsDbAdapter {
      * @return rowId or -1 if failed
      */
     public long createHabitacion(String nombre, String descripcion, String capacidad, String precio, String porcentaje) {
+        try {
+            if (nombre == null || nombre.length() <= 0 ) { return -1; }
+            else if (descripcion == null ) { return -1; }
+            else if (capacidad == null || Integer.parseInt(capacidad) < 1) { return -1; }
+            else if (precio == null || Integer.parseInt(precio) < 0) { return -1; }
+            else if (porcentaje == null || Float.parseFloat(porcentaje) < 0 || Float.parseFloat(porcentaje) > 100) { return -1; }
+        } catch (Exception e) {
+            Log.w(DATABASE_TABLE, e.getStackTrace().toString());
+        }
+
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_DESCRIPCION, descripcion);
         initialValues.put(KEY_NOMBRE, nombre);
@@ -93,6 +104,12 @@ public class RoomsDbAdapter {
      * @return true if deleted, false otherwise
      */
     public boolean deleteHabitacion(long rowId) {
+        try {
+            if (rowId < 1) { return false; }
+        } catch (Exception e) {
+            Log.w(DATABASE_TABLE, e.getStackTrace().toString());
+        }
+
         return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
     }
 
@@ -149,6 +166,17 @@ public class RoomsDbAdapter {
      * @return true if the note was successfully updated, false otherwise
      */
     public boolean updateHabitacion(long rowId, String nombre, String descripcion, String capacidad, String precio, String porcentaje) {
+        try {
+            if (rowId <= -1) { return false; }
+            else if (nombre == null || nombre.length() <= 0 ) { return false; }
+            else if (descripcion == null ) { return false; }
+            else if (capacidad == null || Integer.parseInt(capacidad) < 1) { return false; }
+            else if (precio == null || Integer.parseInt(precio) < 0) { return false; }
+            else if (porcentaje == null || Float.parseFloat(porcentaje) < 0 || Float.parseFloat(porcentaje) > 100) { return false; }
+        } catch (Exception e) {
+            Log.w(DATABASE_TABLE, e.getStackTrace().toString());
+        }
+
         ContentValues args = new ContentValues();
         args.put(KEY_NOMBRE, nombre);
         args.put(KEY_DESCRIPCION, descripcion);

@@ -5,6 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -75,6 +79,20 @@ public class ReservationDbAdapter {
      */
     public long createReserva(String nombreCliente, String telefono, String fechaEntrada,
                               String fechaSalida, String precio) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date dateIn = dateFormat.parse(fechaEntrada);
+            Date dateOut = dateFormat.parse(fechaSalida);
+
+            if (nombreCliente == null || nombreCliente.length() <= 0 ) { return -1; }
+            else if (telefono == null || telefono.length() < 9 || telefono.length() > 9 || !telefono.matches("\\d+")) { return -1; }
+            else if (fechaEntrada == null || dateIn.compareTo(dateOut) >= 0) { return -1; }
+            else if (fechaSalida == null) { return -1; }
+            else if (precio == null || Float.parseFloat(precio) < 0) { return -1; }
+        } catch (Exception e) {
+            Log.w(DATABASE_TABLE, e.getStackTrace().toString());
+        }
+
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_NOMBRE, nombreCliente);
         initialValues.put(KEY_TELEFONO, telefono);
@@ -92,6 +110,12 @@ public class ReservationDbAdapter {
      * @return true if deleted, false otherwise
      */
     public boolean deleteReserva(long rowId) {
+        try {
+            if (rowId < 1) { return false; }
+        } catch (Exception e) {
+            Log.w(DATABASE_TABLE, e.getStackTrace().toString());
+        }
+
         return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
     }
 
@@ -163,6 +187,21 @@ public class ReservationDbAdapter {
      */
     public boolean updateReserva(long rowId, String nombreCliente, String telefono,
                                  String fechaEntrada, String fechaSalida, String precio) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date dateIn = dateFormat.parse(fechaEntrada);
+            Date dateOut = dateFormat.parse(fechaSalida);
+
+            if (rowId <= -1) { return false; }
+            else if (nombreCliente == null || nombreCliente.length() <= 0 ) { return false; }
+            else if (telefono == null || telefono.length() < 9 || telefono.length() > 9 || !telefono.matches("\\d+")) { return false; }
+            else if (fechaEntrada == null || dateIn.compareTo(dateOut) >= 0) { return false; }
+            else if (fechaSalida == null) { return false; }
+            else if (precio == null || Float.parseFloat(precio) < 0) { return false; }
+        } catch (Exception e) {
+            Log.w(DATABASE_TABLE, e.getStackTrace().toString());
+        }
+
         ContentValues args = new ContentValues();
         args.put(KEY_NOMBRE, nombreCliente);
         args.put(KEY_TELEFONO, telefono);

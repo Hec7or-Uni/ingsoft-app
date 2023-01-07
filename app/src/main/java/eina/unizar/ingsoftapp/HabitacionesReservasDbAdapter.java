@@ -5,11 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -73,6 +76,14 @@ public class HabitacionesReservasDbAdapter {
      * @param ocupacion the body of the note
      */
     public long createHabitacionReserva(long idHabitacion, long idReserva, String ocupacion) {
+        try {
+            if (idHabitacion <= -1) { return -1; }
+            else if (idReserva <= -1) { return -1; }
+            else if (ocupacion == null || Integer.parseInt(ocupacion) < 1) {return -1;}
+        } catch (Exception e) {
+            Log.w(DATABASE_TABLE, e.getStackTrace().toString());
+        }
+
         ContentValues initialValues = new ContentValues();
 
         initialValues.put(KEY_IDHABITACION, idHabitacion);
@@ -90,6 +101,12 @@ public class HabitacionesReservasDbAdapter {
      * @return true if deleted, false otherwise
      */
     public boolean deleteHabitacionReserva(long idHabitacion, long idReserva) {
+        try {
+            if (idHabitacion <= -1) { return false; }
+            else if (idReserva <= -1) { return false; }
+        } catch (Exception e) {
+            Log.w(DATABASE_TABLE, e.getStackTrace().toString());
+        }
 
         return mDb.delete(DATABASE_TABLE, KEY_IDHABITACION + "=" + idHabitacion + " AND " +
                 KEY_IDRESERVA + "=" + idReserva, null) > 0;
@@ -128,6 +145,14 @@ public class HabitacionesReservasDbAdapter {
     }
 
     public boolean updateHabitacionReserva(long idHabitacion, long idReserva, String ocupacion) {
+        try {
+            if (idHabitacion <= -1) { return false; }
+            else if (idReserva <= -1) { return false; }
+            else if (ocupacion == null || Integer.parseInt(ocupacion) < 1) {return false; }
+        } catch (Exception e) {
+            Log.w(DATABASE_TABLE, e.getStackTrace().toString());
+        }
+
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_IDHABITACION, idHabitacion);
         initialValues.put(KEY_IDRESERVA, idReserva);
