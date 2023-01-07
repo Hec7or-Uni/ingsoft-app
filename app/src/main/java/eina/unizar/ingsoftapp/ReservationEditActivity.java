@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -16,17 +17,18 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import androidx.appcompat.widget.AppCompatButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -262,6 +264,49 @@ public class ReservationEditActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Devuelva true si fechaSalida y fechaEntrada se encuentran en el periodo marcado por
+     * fechaEntradaOld y fechaSalidaOld
+     * @param fechaEntradaOld
+     * @param fechaSalidaOld
+     * @param fechaEntrada
+     * @param fechaSalida
+     * @return
+     */
+    private boolean fechasOcupadas(String fechaEntradaOld, String fechaSalidaOld, String fechaEntrada, String fechaSalida){
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+            // Convierte las fechas de cadena a objetos Date
+            Date entrada = sdf.parse(fechaEntrada);
+            Date salida = sdf.parse(fechaSalida);
+            Date entradaOld = sdf.parse(fechaEntradaOld);
+            Date salidaOld = sdf.parse(fechaSalidaOld);
+
+
+            // comparamos las fechas
+            if (entrada.after(entradaOld) && entrada.before(salidaOld)) {
+                // la fecha de entrada se encuentra en el intervalo
+                return true;
+            } else if (salida.after(entradaOld) && salida.before(salidaOld)) {
+                // la fecha de salida se encuentra en el intervalo
+                return true;
+            } else if (entrada.before(entradaOld) && salida.after(salidaOld)) {
+                // el intervalo se encuentra dentro del periodo marcado por fechaEntradaOld y fechaSalidaOld
+                return true;
+            }else if( entrada.equals(entradaOld) || salida.equals(salidaOld)){
+                // es el mismo periodo de reserva
+                return true;
+            } else {
+                // ninguna de las fechas se encuentra en el intervalo
+                return false;
+            }
+        }catch (ParseException e) {
+            // En caso de error al parsear las fechas, se devuelve false
+            return false;
+        }
+    }
+
     private void saveState () {
         String nombre = mNombreText.getText().toString();
         String telefono = mTelefonoText.getText().toString();
@@ -269,7 +314,7 @@ public class ReservationEditActivity extends AppCompatActivity {
         String fechaSalida = mFechaSalidaText.getText().toString();
         Double precioRooms = 0.0;
         String precio = "";
-
+        Integer estaReservada = 0;
         if (!(nombre != null && !nombre.equals("") && telefono != null && telefono.length() > 0 && fechasCorrectas(fechaEntrada,fechaSalida))) {
             Toast.makeText(getApplicationContext(),"Reserva no creada/modificada, campos inválidos",Toast.LENGTH_SHORT).show();
         } else{
@@ -290,8 +335,32 @@ public class ReservationEditActivity extends AppCompatActivity {
                 DropDownData data = (DropDownData) field1.getSelectedItem();
                 long field1Value = Long.parseLong(data.getId());
                 String field2Value = field2.getText().toString();
-                // Do something with the values of field1 and
-                if (Integer.parseInt(field2Value) <= 0){
+
+                Cursor cursorRes = mDbReservationHelper.fetchAllReservas();
+                if (cursorRes.moveToFirst()) {
+                    do {
+                        String id = cursorRes.getString(cursorRes.getColumnIndexOrThrow(ReservationDbAdapter.KEY_ROWID));
+                        String fechaEntradaOld = cursorRes.getString(cursorRes.getColumnIndexOrThrow(ReservationDbAdapter.KEY_FECHAENTRADA));
+                        String fechaSalidaOld = cursorRes.getString(cursorRes.getColumnIndexOrThrow(ReservationDbAdapter.KEY_FECHASALIDA));
+
+                        Cursor cursorHabs = mDbRoomMixHelper.fetchAllHabitacionReserva(Long.parseLong(id));
+                        // Caso especial: sumamos 1 si la reserva aun no tiene habitaciones añadidas ya que
+                        // significa que va a añadir una y podria ser del id que se busca
+                        if( cursorHabs.getCount() == 0 && Long.parseLong(id) == mRowId && fechasOcupadas(fechaEntradaOld, fechaSalidaOld, fechaEntrada, fechaSalida) ){
+                            estaReservada ++;
+                        }
+                        if (cursorHabs.moveToFirst()) {
+                            do {
+                                String idRoom = cursorHabs.getString(cursorHabs.getColumnIndexOrThrow(HabitacionesReservasDbAdapter.KEY_IDHABITACION));
+                                if(Long.parseLong(idRoom) == field1Value && fechasOcupadas(fechaEntradaOld, fechaSalidaOld, fechaEntrada, fechaSalida)){
+                                    estaReservada ++;
+                                }
+                            } while (cursorHabs.moveToNext());
+                        }
+                    } while (cursorRes.moveToNext());
+                }
+
+                if (Integer.parseInt(field2Value) <= 0 || estaReservada > 1){
                     mDbRoomMixHelper.deleteHabitacionReserva( field1Value, mRowId);
                 } else{
                     if ( mDbRoomMixHelper.exiteHabitacionReserva(field1Value, mRowId ) ) {
