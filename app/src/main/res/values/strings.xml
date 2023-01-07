@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ingsoftapp</string>
+    <string name="app_name">Booking</string>
     <string name="nombre_hab">Nombre</string>
     <string name="descripcion_hab">Descripcion</string>
     <string name="capacidad_hab">Capacidad</string>
