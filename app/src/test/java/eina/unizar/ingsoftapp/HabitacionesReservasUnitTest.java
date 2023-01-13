@@ -15,7 +15,6 @@ import org.junit.Test;
  */
 public class HabitacionesReservasUnitTest {
     private static final String MIX_TAG     = "HabitacionesReservas";
-    private static final String CLEAN_TAG   = "Clean";
 
     private HabitacionesReservasDbAdapter   mixDBHelper;
 

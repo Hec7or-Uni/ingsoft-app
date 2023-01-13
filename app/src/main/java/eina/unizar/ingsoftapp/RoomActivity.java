@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class RoomActivity extends AppCompatActivity {
 
     private RoomsDbAdapter mDbHelper;
@@ -104,7 +106,18 @@ public class RoomActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        RoomUnitTest Room = new RoomUnitTest();
+        ReservationUnitTest Reservation = new ReservationUnitTest();
+        HabitacionesReservasUnitTest Mix = new HabitacionesReservasUnitTest();
+
         if (id == R.id.item1) {
+            try {
+                Room.run();
+                Reservation.run();
+//                Mix.run();
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
             Toast.makeText(this, "Opcion 1 pulsada", Toast.LENGTH_LONG).show();
         } else if (id == R.id.item2) {
             Toast.makeText(this, "Opcion 2 pulsada", Toast.LENGTH_LONG).show();
