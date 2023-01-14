@@ -29,8 +29,7 @@ public class HabitacionesReservasUnitTest extends Test {
                 if (method.getName().contains("Incorrect")) {
                     method.invoke(obj);
                 } else {
-//                    long rowId = mixDBHelper.createHabitacion("Luciernaga","2 camas + baño",
-                            "3","23.50","25");
+//                    long rowId = mixDBHelper.createHabitacion("Luciernaga","2 camas + baño","3","23.50","25");
 //                    method.invoke(obj, rowId);
                 }
             }

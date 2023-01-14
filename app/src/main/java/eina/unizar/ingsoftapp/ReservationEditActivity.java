@@ -111,10 +111,6 @@ public class ReservationEditActivity extends AppCompatActivity {
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                /*Cursor cursorCli = mDbReservationHelper.fetchReserva(mRowId);
-                String client = cursorCli.getString(cursorCli.getColumnIndexOrThrow(ReservationDbAdapter.KEY_NOMBRE));
-                SendAbstractionImpl Sender = new SendAbstractionImpl(ReservationEditActivity.this, "SMS");
-                Sender.send(client, "Reserva confirmada");*/
                 setResult(RESULT_OK);
                 finish();
             }
@@ -379,6 +375,12 @@ public class ReservationEditActivity extends AppCompatActivity {
             precio = df.format(precioRooms);
             mPrecioText.setText(precio + " €");
             mDbReservationHelper.updateReserva( mRowId , nombre , telefono, fechaEntrada, fechaSalida, precio );
+
+            // Enviamos confirmación de la reserva
+            Cursor cursorCli = mDbReservationHelper.fetchReserva(mRowId);
+            String client = cursorCli.getString(cursorCli.getColumnIndexOrThrow(ReservationDbAdapter.KEY_NOMBRE));
+            SendAbstractionImpl Sender = new SendAbstractionImpl(ReservationEditActivity.this, "SMS");
+            Sender.send(client, "Reserva confirmada");
         }
     }
 
