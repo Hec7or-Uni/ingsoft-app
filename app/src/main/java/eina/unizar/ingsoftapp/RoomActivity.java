@@ -113,12 +113,15 @@ public class RoomActivity extends AppCompatActivity {
 
         if (id == R.id.item1) {
             try {
-                Room.run();
-                Reservation.run();
+                Room.run(this);
+//                Reservation.run();
 //                Mix.run();
             } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
             Toast.makeText(this, "Opcion 1 pulsada", Toast.LENGTH_LONG).show();
         } else if (id == R.id.item2) {
             Toast.makeText(this, "Opcion 2 pulsada", Toast.LENGTH_LONG).show();

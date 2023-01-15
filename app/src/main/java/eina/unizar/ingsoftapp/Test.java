@@ -1,6 +1,7 @@
 package eina.unizar.ingsoftapp;
 
 public class Test {
+
     public void assertTrue(boolean success) throws Exception {
         if (success == false) throw new Exception("Se esperaba True");
     }

@@ -1,5 +1,6 @@
 package eina.unizar.ingsoftapp;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.lang.reflect.InvocationTargetException;
@@ -9,31 +10,22 @@ public class RoomUnitTest extends Test {
     private static final String ROOM_TAG    = "Habitacion";
     private RoomsDbAdapter roomsDBHelper;
 
-    public void run() throws InvocationTargetException, IllegalAccessException {
-        Class miClase = RoomUnitTest.class;
-        Method[] methods = miClase.getDeclaredMethods();
-        Object obj = new RoomUnitTest();
+    public void run(Context ctx) throws Exception {
+        roomsDBHelper = new RoomsDbAdapter(ctx);
+        roomsDBHelper.open();
 
-        for (Method method : methods) {
-            System.out.println(method.getName());
+        creation_isCorrect();
+        creation_isIncorrect_1();
+        creation_isIncorrect_2();
+        creation_isIncorrect_3();
+        creation_isIncorrect_4();
+        creation_isIncorrect_5();
+        creation_isIncorrect_6();
+        creation_isIncorrect_7();
+        creation_isIncorrect_8();
+        creation_isIncorrect_9();
+        creation_isIncorrect_10();
 
-            if (method.getName().startsWith("creation")) {
-                method.invoke(obj);
-            } else if (method.getName().startsWith("update")) {
-                long rowId = roomsDBHelper.createHabitacion("Luciernaga","2 camas + baño",
-                        "3","23.50","25");
-                method.invoke(obj, rowId);
-                roomsDBHelper.deleteHabitacion(rowId);
-            } else if (method.getName().startsWith("delete")) {
-                if (method.getName().contains("Incorrect")) {
-                    method.invoke(obj);
-                } else {
-                    long rowId = roomsDBHelper.createHabitacion("Luciernaga","2 camas + baño",
-                            "3","23.50","25");
-                    method.invoke(obj, rowId);
-                }
-            }
-        }
     }
 
     // ----- Habitaciones ----------------------------

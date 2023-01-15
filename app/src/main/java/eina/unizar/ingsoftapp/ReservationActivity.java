@@ -17,6 +17,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class ReservationActivity extends AppCompatActivity {
 
     private TestVolSob TestVolumen;
@@ -107,7 +109,21 @@ public class ReservationActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        RoomUnitTest Room = new RoomUnitTest();
+        ReservationUnitTest Reservation = new ReservationUnitTest();
+        HabitacionesReservasUnitTest Mix = new HabitacionesReservasUnitTest();
+
         if (id == R.id.item1) {
+//            try {
+//                Room.run(this);
+//                Reservation.run();
+//                Mix.run();
+//            } catch (IllegalAccessException | InvocationTargetException e) {
+//                e.printStackTrace();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+
             Toast.makeText(this, "Opcion 1 pulsada", Toast.LENGTH_LONG).show();
         } else if (id == R.id.item2) {
             Toast.makeText(this, "Opcion 2 pulsada", Toast.LENGTH_LONG).show();
@@ -115,7 +131,6 @@ public class ReservationActivity extends AppCompatActivity {
             fillData();
         } else if (id == R.id.item3) {
             Toast.makeText(this, "Opcion 3 pulsada", Toast.LENGTH_LONG).show();
-
         }else if (id == R.id.item4) {
             Toast.makeText(this, "Opcion 4 pulsada", Toast.LENGTH_LONG).show();
             TestVolumen.borrarReservas();

@@ -33,7 +33,7 @@ public class RoomsDbAdapter {
 
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
-
+    String nulo = null;
     /**
      * Constructor - takes the context to allow the database to be
      * opened/created
@@ -77,24 +77,28 @@ public class RoomsDbAdapter {
      * @return rowId or -1 if failed
      */
     public long createHabitacion(String nombre, String descripcion, String capacidad, String precio, String porcentaje) {
+        long result = 0;
         try {
-            if (nombre == null || nombre.length() <= 0 ) { return -1; }
-            else if (descripcion == null ) { return -1; }
-            else if (capacidad == null || Integer.parseInt(capacidad) < 1) { return -1; }
-            else if (precio == null || Integer.parseInt(precio) < 0) { return -1; }
-            else if (porcentaje == null || Float.parseFloat(porcentaje) < 0 || Float.parseFloat(porcentaje) > 100) { return -1; }
+            if (nombre == null || nombre.length() <= 0 ) { result =  -1; }
+            else if (descripcion == null) { result =  -1;; }
+            else if (capacidad == null || Integer.parseInt(capacidad) < 1) { result =  -1; }
+            else if (precio == null || Float.parseFloat(precio) < 0) { result =  -1; }
+            else if (porcentaje == null || Float.parseFloat(porcentaje) < 0 || Float.parseFloat(porcentaje) > 100) { result =  -1; }
         } catch (Exception e) {
             Log.w(DATABASE_TABLE, e.getStackTrace().toString());
         }
 
-        ContentValues initialValues = new ContentValues();
-        initialValues.put(KEY_DESCRIPCION, descripcion);
-        initialValues.put(KEY_NOMBRE, nombre);
-        initialValues.put(KEY_CAPACIDAD, capacidad);
-        initialValues.put(KEY_PRECIO, precio);
-        initialValues.put(KEY_PORCENTAJEEXTRA, porcentaje);
+        if (result != -1) {
+            ContentValues initialValues = new ContentValues();
+            initialValues.put(KEY_DESCRIPCION, descripcion);
+            initialValues.put(KEY_NOMBRE, nombre);
+            initialValues.put(KEY_CAPACIDAD, capacidad);
+            initialValues.put(KEY_PRECIO, precio);
+            initialValues.put(KEY_PORCENTAJEEXTRA, porcentaje);
+            result = mDb.insert(DATABASE_TABLE, null, initialValues);
+        }
 
-        return mDb.insert(DATABASE_TABLE, null, initialValues);
+        return result;
     }
 
     /**

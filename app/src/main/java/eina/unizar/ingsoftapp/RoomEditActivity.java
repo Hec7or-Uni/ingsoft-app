@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class RoomEditActivity extends AppCompatActivity {
 
-    private RoomsDbAdapter mDbHelper ;
+    private RoomsDbAdapter mDbHelper;
     private EditText mNombreText;
     private EditText mDescripcionText;
     private EditText mCapacidadText;

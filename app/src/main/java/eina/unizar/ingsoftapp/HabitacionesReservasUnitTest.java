@@ -21,16 +21,15 @@ public class HabitacionesReservasUnitTest extends Test {
             if (method.getName().startsWith("creation")) {
                 method.invoke(obj);
             } else if (method.getName().startsWith("update")) {
-//                long rowId = mixDBHelper.createHabitacion("Luciernaga","2 camas + baño",
-//                        "3","23.50","25");
-//                method.invoke(obj, rowId);
-//                mixDBHelper.deleteHabitacion(rowId);
+                mixDBHelper.createHabitacionReserva(1,1,"2");
+                method.invoke(obj, 1, 1);
+                mixDBHelper.deleteHabitacionReserva(1, 1);
             } else if (method.getName().startsWith("delete")) {
                 if (method.getName().contains("Incorrect")) {
                     method.invoke(obj);
                 } else {
-//                    long rowId = mixDBHelper.createHabitacion("Luciernaga","2 camas + baño","3","23.50","25");
-//                    method.invoke(obj, rowId);
+                    mixDBHelper.createHabitacionReserva(1,1,"2");
+                    method.invoke(obj, 1, 1);
                 }
             }
         }
@@ -38,10 +37,11 @@ public class HabitacionesReservasUnitTest extends Test {
 
     // ----- Habitaciones y Reservas -----
 
-    public void creation_isCorrect(long roomId, long resId) throws Exception {
-        long rowId = mixDBHelper.createHabitacionReserva(roomId,resId,"2");
+    public void creation_isCorrect() throws Exception {
+        long rowId = mixDBHelper.createHabitacionReserva(1,1,"2");
         assertTrue(-1 != rowId);
         Log.d(MIX_TAG,"HabitacionReserva creada con exito");
+        mixDBHelper.deleteHabitacionReserva(1, 1);
     }
 
     public void update_isCorrect(long roomId, long resId) throws Exception {
@@ -51,7 +51,7 @@ public class HabitacionesReservasUnitTest extends Test {
     }
 
     public void delete_isCorrect(long roomId, long resId) throws Exception {
-        Boolean success = mixDBHelper.deleteHabitacionReserva(roomId,resId);
+        Boolean success = mixDBHelper.deleteHabitacionReserva(roomId, resId);
         assertTrue(success);
         Log.d(MIX_TAG,"HabitacionReserva borrada con exito");
     }
