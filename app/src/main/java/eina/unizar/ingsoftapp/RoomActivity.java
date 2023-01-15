@@ -126,6 +126,8 @@ public class RoomActivity extends AppCompatActivity {
             fillData();
         } else if (id == R.id.item3) {
             Toast.makeText(this, "Opcion 3 pulsada", Toast.LENGTH_LONG).show();
+            TestVolumen.pruebaSobrecarga();
+            fillData();
         }else if (id == R.id.item4) {
             Toast.makeText(this, "Opcion 4 pulsada", Toast.LENGTH_LONG).show();
             TestVolumen.borrarHabitaciones();
