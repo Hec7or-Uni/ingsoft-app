@@ -20,7 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.lang.reflect.InvocationTargetException;
 
 public class RoomActivity extends AppCompatActivity {
-
+    private TestVolSob TestVolumen;
     private RoomsDbAdapter mDbHelper;
     ListView rooms;
 
@@ -29,6 +29,7 @@ public class RoomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.room_activity_main);
 
+        TestVolumen = new TestVolSob(this);
         // References
         Button res = findViewById(R.id.reservations);
         Button hab = findViewById(R.id.rooms);
@@ -121,8 +122,14 @@ public class RoomActivity extends AppCompatActivity {
             Toast.makeText(this, "Opcion 1 pulsada", Toast.LENGTH_LONG).show();
         } else if (id == R.id.item2) {
             Toast.makeText(this, "Opcion 2 pulsada", Toast.LENGTH_LONG).show();
+            TestVolumen.crearCienHabitaciones();
+            fillData();
         } else if (id == R.id.item3) {
             Toast.makeText(this, "Opcion 3 pulsada", Toast.LENGTH_LONG).show();
+        }else if (id == R.id.item4) {
+            Toast.makeText(this, "Opcion 4 pulsada", Toast.LENGTH_LONG).show();
+            TestVolumen.borrarHabitaciones();
+            fillData();
         }
 
         return super.onOptionsItemSelected(item);

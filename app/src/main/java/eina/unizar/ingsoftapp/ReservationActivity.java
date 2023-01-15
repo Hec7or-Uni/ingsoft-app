@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ReservationActivity extends AppCompatActivity {
 
+    private TestVolSob TestVolumen;
     private ReservationDbAdapter mDbHelper;
     ListView reservations;
 
@@ -26,6 +27,8 @@ public class ReservationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reservation_activity_main);
+
+        TestVolumen = new TestVolSob(this);
 
         // References
         Button res = findViewById(R.id.reservations);
@@ -108,8 +111,14 @@ public class ReservationActivity extends AppCompatActivity {
             Toast.makeText(this, "Opcion 1 pulsada", Toast.LENGTH_LONG).show();
         } else if (id == R.id.item2) {
             Toast.makeText(this, "Opcion 2 pulsada", Toast.LENGTH_LONG).show();
+            TestVolumen.crearDosmilReservas();
+            fillData();
         } else if (id == R.id.item3) {
             Toast.makeText(this, "Opcion 3 pulsada", Toast.LENGTH_LONG).show();
+        }else if (id == R.id.item4) {
+            Toast.makeText(this, "Opcion 4 pulsada", Toast.LENGTH_LONG).show();
+            TestVolumen.borrarReservas();
+            fillData();
         }
 
         return super.onOptionsItemSelected(item);

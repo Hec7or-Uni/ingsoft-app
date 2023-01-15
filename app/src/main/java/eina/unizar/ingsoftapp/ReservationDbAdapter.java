@@ -119,6 +119,10 @@ public class ReservationDbAdapter {
         return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
     }
 
+    public boolean deleteAllReservas() {
+        return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + KEY_ROWID, null) > 0;
+    }
+
     /**
      * Return a Cursor over the list of all notes in the database
      *
