@@ -7,8 +7,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import eina.unizar.ingsoftapp.DatabaseHelper;
-
 /**
  * Simple notes database access helper class. Defines the basic CRUD operations
  * for the notepad example, and gives the ability to list all notes as well as
@@ -33,7 +31,7 @@ public class RoomsDbAdapter {
 
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
-    String nulo = null;
+
     /**
      * Constructor - takes the context to allow the database to be
      * opened/created
@@ -80,7 +78,7 @@ public class RoomsDbAdapter {
         long result = 0;
         try {
             if (nombre == null || nombre.length() <= 0 ) { result =  -1; }
-            else if (descripcion == null) { result =  -1;; }
+            else if (descripcion == null) { result =  -1; }
             else if (capacidad == null || Integer.parseInt(capacidad) < 1) { result =  -1; }
             else if (precio == null || Float.parseFloat(precio) < 0) { result =  -1; }
             else if (porcentaje == null || Float.parseFloat(porcentaje) < 0 || Float.parseFloat(porcentaje) > 100) { result =  -1; }
