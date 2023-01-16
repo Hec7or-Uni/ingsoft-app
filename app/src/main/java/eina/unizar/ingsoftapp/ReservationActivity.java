@@ -114,17 +114,14 @@ public class ReservationActivity extends AppCompatActivity {
         HabitacionesReservasUnitTest Mix = new HabitacionesReservasUnitTest();
 
         if (id == R.id.item1) {
-//            try {
-//                Room.run(this);
-//                Reservation.run();
-//                Mix.run();
-//            } catch (IllegalAccessException | InvocationTargetException e) {
-//                e.printStackTrace();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+            if (0 == Room.run(this)){ Toast.makeText(this, "Test habitaciones OK", Toast.LENGTH_LONG).show(); }
+            else { Toast.makeText(this, "ERROR Test habitaciones", Toast.LENGTH_LONG).show(); }
 
-            Toast.makeText(this, "Opcion 1 pulsada", Toast.LENGTH_LONG).show();
+            if (0 == Reservation.run(this)){ Toast.makeText(this, "Test reservas OK", Toast.LENGTH_LONG).show(); }
+            else { Toast.makeText(this, "ERROR Test reservas", Toast.LENGTH_LONG).show(); }
+
+            if (0 == Mix.run(this)){ Toast.makeText(this, "Test both OK", Toast.LENGTH_LONG).show(); }
+            else { Toast.makeText(this, "ERROR Test both", Toast.LENGTH_LONG).show(); }
         } else if (id == R.id.item2) {
             Toast.makeText(this, "Opcion 2 pulsada", Toast.LENGTH_LONG).show();
             TestVolumen.crearDosmilReservas();

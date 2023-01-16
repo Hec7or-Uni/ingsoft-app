@@ -3,121 +3,132 @@ package eina.unizar.ingsoftapp;
 import android.content.Context;
 import android.util.Log;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 public class HabitacionesReservasUnitTest extends Test {
     private static final String MIX_TAG     = "HabitacionesReservas";
     private HabitacionesReservasDbAdapter   mixDBHelper;
 
-
-    public void run(Context ctx) throws Exception {
+    public int run(Context ctx) {
         mixDBHelper = new HabitacionesReservasDbAdapter(ctx);
         mixDBHelper.open();
         long roomId = 1, resId = 1;
+        int flags = 0;
 
-        creation_isCorrect();
-        creation_isIncorrect_1();
-        creation_isIncorrect_2();
-        creation_isIncorrect_3();
-        creation_isIncorrect_4();
+        flags += creation_isCorrect();
+        flags += creation_isIncorrect_1();
+        flags += creation_isIncorrect_2();
+        flags += creation_isIncorrect_3();
+        flags += creation_isIncorrect_4();
 
         mixDBHelper.createHabitacionReserva(roomId,resId,"2");
-        update_isCorrect(roomId, resId);
-        update_isIncorrect_1();
-        update_isIncorrect_2();
-        update_isIncorrect_3();
-        update_isIncorrect_4();
+        flags += update_isCorrect(roomId, resId);
+        flags += update_isIncorrect_1();
+        flags += update_isIncorrect_2();
+        flags += update_isIncorrect_3();
+        flags += update_isIncorrect_4();
 
-        delete_isCorrect(roomId, resId);
-        delete_isIncorrect_1();
-        delete_isIncorrect_2();
+        flags += delete_isCorrect(roomId, resId);
+        flags += delete_isIncorrect_1();
+        flags += delete_isIncorrect_2();
+        return flags;
     }
 
     // ----- Habitaciones y Reservas -----
 
-    public void creation_isCorrect() throws Exception {
+    public int creation_isCorrect() {
         long rowId = mixDBHelper.createHabitacionReserva(1,1,"2");
-        assertTrue(-1 != rowId);
+        int flag = assertTrue(-1 != rowId);
         Log.d(MIX_TAG,"HabitacionReserva creada con exito");
         mixDBHelper.deleteHabitacionReserva(1, 1);
+        return flag;
     }
 
-    public void update_isCorrect(long roomId, long resId) throws Exception {
+    public int update_isCorrect(long roomId, long resId) {
         Boolean success = mixDBHelper.updateHabitacionReserva(roomId,resId,"6");
-        assertTrue(success);
+        int flag = assertTrue(success);
         Log.d(MIX_TAG,"HabitacionReserva actualizada con exito");
+        return flag;
     }
 
-    public void delete_isCorrect(long roomId, long resId) throws Exception {
+    public int delete_isCorrect(long roomId, long resId) {
         Boolean success = mixDBHelper.deleteHabitacionReserva(roomId, resId);
-        assertTrue(success);
+        int flag = assertTrue(success);
         Log.d(MIX_TAG,"HabitacionReserva borrada con exito");
+        return flag;
     }
 
     // -----------------------------------------------
 
-    public void creation_isIncorrect_1() throws Exception {
+    public int creation_isIncorrect_1() {
         long rowId = mixDBHelper.createHabitacionReserva(-1,1,"2");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(MIX_TAG,"check: idHabitacion invalido");
+        return flag;
     }
 
-    public void creation_isIncorrect_2() throws Exception {
+    public int creation_isIncorrect_2() {
         long rowId = mixDBHelper.createHabitacionReserva(1,-1,"2");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(MIX_TAG,"check: idReserva invalido");
+        return flag;
     }
 
-    public void creation_isIncorrect_3() throws Exception {
+    public int creation_isIncorrect_3() {
         long rowId = mixDBHelper.createHabitacionReserva(1,1,null);
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(MIX_TAG,"check: ocupacion nula");
+        return flag;
     }
 
-    public void creation_isIncorrect_4() throws Exception {
+    public int creation_isIncorrect_4() {
         long rowId = mixDBHelper.createHabitacionReserva(1,1,"0");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(MIX_TAG,"check: ocupacion menor que 1");
+        return flag;
     }
 
     // -----------------------------------------------
 
-    public void update_isIncorrect_1() throws Exception {
+    public int update_isIncorrect_1() {
         Boolean success = mixDBHelper.updateHabitacionReserva(-1,1,"6");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(MIX_TAG,"check: idHabitacion invalido");
+        return flag;
     }
 
-    public void update_isIncorrect_2() throws Exception {
+    public int update_isIncorrect_2() {
         Boolean success = mixDBHelper.updateHabitacionReserva(1,-1,"6");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(MIX_TAG,"check: idReserva invalido");
+        return flag;
     }
 
-    public void update_isIncorrect_3() throws Exception {
+    public int update_isIncorrect_3() {
         Boolean success = mixDBHelper.updateHabitacionReserva(1,1,null);
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(MIX_TAG,"check: ocupacion nula");
+        return flag;
     }
 
-    public void update_isIncorrect_4() throws Exception {
+    public int update_isIncorrect_4() {
         Boolean success = mixDBHelper.updateHabitacionReserva(1,1,"0");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(MIX_TAG,"check: ocupacion menor que 1");
+        return flag;
     }
 
     // -----------------------------------------------
 
-    public void delete_isIncorrect_1() throws Exception {
+    public int delete_isIncorrect_1() {
         Boolean success = mixDBHelper.deleteHabitacionReserva(-1,1);
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(MIX_TAG,"check: idhabitacion es negativo");
+        return flag;
     }
 
-    public void delete_isIncorrect_2() throws Exception {
+    public int delete_isIncorrect_2() {
         Boolean success = mixDBHelper.deleteHabitacionReserva(1,-1);
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(MIX_TAG,"check: idreserva es negativo");
+        return flag;
     }
 }

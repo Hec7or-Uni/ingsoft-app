@@ -1,16 +1,32 @@
 package eina.unizar.ingsoftapp;
 
+import android.util.Log;
+
 public class Test {
+    private String DEBUG = "Testing";
 
-    public void assertTrue(boolean success) throws Exception {
-        if (success == false) throw new Exception("Se esperaba True");
+    public int assertTrue(boolean success) {
+        if (success) { return 0; }
+
+        Log.d(DEBUG,"Se esperaba True");
+        return 1;
     }
 
-    public void assertFalse(Boolean success) throws Exception {
-        if (success == true) throw new Exception("Se esperaba False");
+    public int assertFalse(Boolean success)  {
+        if (success) {
+            Log.d(DEBUG,"Se esperaba False");
+            return 1;
+        }
+
+        return 0;
     }
 
-    public void assertEquals(int i, long rowId) throws Exception {
-        if (i != rowId) throw new Exception("Se esperaba que fuesen iguales");
+    public int assertEquals(long i, long rowId) {
+        if (i != rowId) {
+            Log.d(DEBUG,"Se esperaba que fuesen iguales");
+            return 1;
+        }
+
+        return 0;
     }
 }

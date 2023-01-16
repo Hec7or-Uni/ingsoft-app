@@ -10,216 +10,243 @@ public class RoomUnitTest extends Test {
     private static final String ROOM_TAG    = "Habitacion";
     private RoomsDbAdapter roomsDBHelper;
 
-    public void run(Context ctx) throws Exception {
+    public int run(Context ctx) {
         roomsDBHelper = new RoomsDbAdapter(ctx);
         roomsDBHelper.open();
         long rowId = 0;
+        int flags = 0;
 
-        creation_isCorrect();
-        creation_isIncorrect_1();
-        creation_isIncorrect_2();
-        creation_isIncorrect_3();
-        creation_isIncorrect_4();
-        creation_isIncorrect_5();
-        creation_isIncorrect_6();
-        creation_isIncorrect_7();
-        creation_isIncorrect_8();
-        creation_isIncorrect_9();
-        creation_isIncorrect_10();
+        flags += creation_isCorrect();
+        flags += creation_isIncorrect_1();
+        flags += creation_isIncorrect_2();
+        flags += creation_isIncorrect_3();
+        flags += creation_isIncorrect_4();
+        flags += creation_isIncorrect_5();
+        flags += creation_isIncorrect_6();
+        flags += creation_isIncorrect_7();
+        flags += creation_isIncorrect_8();
+        flags +=creation_isIncorrect_9();
+        flags +=creation_isIncorrect_10();
 
         rowId = roomsDBHelper.createHabitacion("Luciernaga","2 camas + baño",
                 "3","23.50","25");
-        update_isCorrect(rowId);
-        update_isIncorrect_1(rowId);
-        update_isIncorrect_2(rowId);
-        update_isIncorrect_3(rowId);
-        update_isIncorrect_4(rowId);
-        update_isIncorrect_5(rowId);
-        update_isIncorrect_6(rowId);
-        update_isIncorrect_7(rowId);
-        update_isIncorrect_8(rowId);
-        update_isIncorrect_9(rowId);
-        update_isIncorrect_10(rowId);
+        flags += update_isCorrect(rowId);
+        flags += update_isIncorrect_1(rowId);
+        flags += update_isIncorrect_2(rowId);
+        flags += update_isIncorrect_3(rowId);
+        flags += update_isIncorrect_4(rowId);
+        flags += update_isIncorrect_5(rowId);
+        flags += update_isIncorrect_6(rowId);
+        flags += update_isIncorrect_7(rowId);
+        flags += update_isIncorrect_8(rowId);
+        flags += update_isIncorrect_9(rowId);
+        flags += update_isIncorrect_10(rowId);
 
-        delete_isCorrect(rowId);
-        delete_isIncorrect();
+        flags += delete_isCorrect(rowId);
+        flags += delete_isIncorrect();
+
+        return flags;
     }
 
     // ----- Habitaciones ----------------------------
 
-    public void creation_isCorrect() throws Exception {
+    public int creation_isCorrect() {
         long rowId = roomsDBHelper.createHabitacion("Luciernaga","2 camas + baño",
                 "3","23.50","25");
         Log.d(ROOM_TAG, "id");
-        assertTrue(-1 != rowId);
+        int flag = assertTrue(-1 != rowId);
         Log.d(ROOM_TAG,"Habitacion creada con exito");
 
         // Elimina la habitacion creada por el test
         roomsDBHelper.deleteHabitacion(rowId);
+        return flag;
     }
 
-    public void update_isCorrect(long rowId) throws Exception {
+    public int update_isCorrect(long rowId) {
         Boolean success = roomsDBHelper.updateHabitacion(rowId, "Luciernaga","2 camas + baño",
                 "3","23.50","25");
-        assertTrue(success);
+        int flag = assertTrue(success);
         Log.d(ROOM_TAG,"Habitacion actualizada con exito");
+        return flag;
     }
 
-    public void delete_isCorrect(long rowId) throws Exception {
+    public int delete_isCorrect(long rowId) {
         Boolean success = roomsDBHelper.deleteHabitacion(rowId);
-        assertTrue(success);
+        int flag = assertTrue(success);
         Log.d(ROOM_TAG,"Habitacion borrada con exito");
+        return flag;
     }
 
     // -----------------------------------------------
 
-    public void creation_isIncorrect_1() throws Exception {
+    public int creation_isIncorrect_1() {
         long rowId = roomsDBHelper.createHabitacion(null,"2 camas + baño",
                 "3","23.50","25");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(ROOM_TAG,"check: nombre nulo");
+        return flag;
     }
 
-    public void creation_isIncorrect_2() throws Exception {
+    public int creation_isIncorrect_2() {
         long rowId = roomsDBHelper.createHabitacion("","2 camas + baño",
                 "3","23.50","25");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(ROOM_TAG,"check: cadena vacia");
+        return flag;
     }
 
-    public void creation_isIncorrect_3() throws Exception {
+    public int creation_isIncorrect_3() {
         long rowId = roomsDBHelper.createHabitacion("Luciernaga",null,
                 "3","23.50","25");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(ROOM_TAG,"check: descripcion nula");
+        return flag;
     }
 
-    public void creation_isIncorrect_4() throws Exception {
+    public int creation_isIncorrect_4() {
         long rowId = roomsDBHelper.createHabitacion("Luciernaga","2 camas + baño",
                 null,"23.50","25");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(ROOM_TAG,"check: capacidad nula");
+        return flag;
     }
 
-    public void creation_isIncorrect_5() throws Exception {
+    public int creation_isIncorrect_5() {
         long rowId = roomsDBHelper.createHabitacion("Luciernaga","2 camas + baño",
                 "0","23.50","25");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(ROOM_TAG,"check: capacidad menor que 1");
+        return flag;
     }
 
-    public void creation_isIncorrect_6() throws Exception {
+    public int creation_isIncorrect_6() {
         long rowId = roomsDBHelper.createHabitacion("Luciernaga","2 camas + baño",
                 "3",null,"25");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(ROOM_TAG,"check: precio nulo");
+        return flag;
     }
 
-    public void creation_isIncorrect_7() throws Exception {
+    public int creation_isIncorrect_7() {
         long rowId = roomsDBHelper.createHabitacion("Luciernaga","2 camas + baño",
                 "3","-10","25");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(ROOM_TAG,"check: precio negativo");
+        return flag;
     }
 
-    public void creation_isIncorrect_8() throws Exception {
+    public int creation_isIncorrect_8() {
         long rowId = roomsDBHelper.createHabitacion("Luciernaga","2 camas + baño",
                 "3","23.50",null);
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(ROOM_TAG,"check: porcentaje nulo");
+        return flag;
     }
 
-    public void creation_isIncorrect_9() throws Exception {
+    public int creation_isIncorrect_9() {
         long rowId = roomsDBHelper.createHabitacion("Luciernaga","2 camas + baño",
                 "3","23.50","-10");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(ROOM_TAG,"check: porcentaje negativo");
+        return flag;
     }
 
-    public void creation_isIncorrect_10() throws Exception {
+    public int creation_isIncorrect_10() {
         long rowId = roomsDBHelper.createHabitacion("Luciernaga","2 camas + baño",
                 "3","23.50","110");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(ROOM_TAG,"check: porcentaje pasa el tope");
+        return flag;
     }
 
     // -----------------------------------------------
 
-    public void update_isIncorrect_1(long rowId) throws Exception {
+    public int update_isIncorrect_1(long rowId) {
         Boolean success = roomsDBHelper.updateHabitacion(rowId, null,"2 camas + baño",
                 "3","23.50","25");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(ROOM_TAG,"check: nombre es nulo");
+        return flag;
     }
 
-    public void update_isIncorrect_2(long rowId) throws Exception {
+    public int update_isIncorrect_2(long rowId) {
         Boolean success = roomsDBHelper.updateHabitacion(rowId, "","2 camas + baño",
                 "3","23.50","25");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(ROOM_TAG,"check: nombre es cadena vacia");
+        return flag;
     }
 
-    public void update_isIncorrect_3(long rowId) throws Exception {
+    public int update_isIncorrect_3(long rowId) {
         Boolean success = roomsDBHelper.updateHabitacion(rowId, "Luciernaga",null,
                 "3","23.50","25");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(ROOM_TAG,"check: descripcion nula");
+        return flag;
     }
 
-    public void update_isIncorrect_4(long rowId) throws Exception {
+    public int update_isIncorrect_4(long rowId) {
         Boolean success = roomsDBHelper.updateHabitacion(rowId, "Luciernaga","2 camas + baño",
                 null,"23.50","25");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(ROOM_TAG,"check: capacidad nula");
+        return flag;
     }
 
-    public void update_isIncorrect_5(long rowId) throws Exception {
+    public int update_isIncorrect_5(long rowId) {
         Boolean success = roomsDBHelper.updateHabitacion(rowId, "Luciernaga","2 camas + baño",
                 "0","23.50","25");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(ROOM_TAG,"check: capacidad menor que 1");
+        return flag;
     }
 
-    public void update_isIncorrect_6(long rowId) throws Exception {
+    public int update_isIncorrect_6(long rowId) {
         Boolean success = roomsDBHelper.updateHabitacion(rowId, "Luciernaga","2 camas + baño",
                 "3",null,"25");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(ROOM_TAG,"check: precio nulo");
+        return flag;
     }
 
-    public void update_isIncorrect_7(long rowId) throws Exception {
+    public int update_isIncorrect_7(long rowId) {
         Boolean success = roomsDBHelper.updateHabitacion(rowId, "Luciernaga","2 camas + baño",
                 "3","-10","25");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(ROOM_TAG,"check: precio negativo");
+        return flag;
     }
 
-    public void update_isIncorrect_8(long rowId) throws Exception {
+    public int update_isIncorrect_8(long rowId) {
         Boolean success = roomsDBHelper.updateHabitacion(rowId, "Luciernaga","2 camas + baño",
                 "3","23.50",null);
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(ROOM_TAG,"check: porcentaje nulo");
+        return flag;
     }
 
-    public void update_isIncorrect_9(long rowId) throws Exception {
+    public int update_isIncorrect_9(long rowId) {
         Boolean success = roomsDBHelper.updateHabitacion(rowId, "Luciernaga","2 camas + baño",
                 "3","23.50","-10");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(ROOM_TAG,"check: porcentaje negativo");
+        return flag;
     }
 
-    public void update_isIncorrect_10(long rowId) throws Exception {
+    public int update_isIncorrect_10(long rowId) {
         Boolean success = roomsDBHelper.updateHabitacion(rowId, "Luciernaga","2 camas + baño",
                 "3","23.50","110");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(ROOM_TAG,"check: porcentaje pasa el tope");
+        return flag;
     }
 
     // -----------------------------------------------
 
-    public void delete_isIncorrect() throws Exception {
+    public int delete_isIncorrect() {
         Boolean success = roomsDBHelper.deleteHabitacion(-1);
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(ROOM_TAG,"check: Eliminar habitación fallo por indice negativo.");
+        return flag;
     }
 }

@@ -10,226 +10,255 @@ public class ReservationUnitTest extends Test {
     private static final String BOOKING_TAG = "Reservas";
     private ReservationDbAdapter            bookingDBHelper;
 
-    public void run(Context ctx) throws Exception {
+    public int run(Context ctx) {
         bookingDBHelper = new ReservationDbAdapter(ctx);
         bookingDBHelper.open();
         long rowId = 0;
+        int flags = 0;
 
-        creation_isCorrect();
-        creation_isIncorrect_1();
-        creation_isIncorrect_2();
-        creation_isIncorrect_3();
-        creation_isIncorrect_4();
-        creation_isIncorrect_5();
-        creation_isIncorrect_6();
-        creation_isIncorrect_7();
-        creation_isIncorrect_8();
-        creation_isIncorrect_9();
-        creation_isIncorrect_10();
-        creation_isIncorrect_11();
+        flags += creation_isCorrect();
+        flags += creation_isIncorrect_1();
+        flags += creation_isIncorrect_2();
+        flags += creation_isIncorrect_3();
+        flags += creation_isIncorrect_4();
+        flags += creation_isIncorrect_5();
+        flags += creation_isIncorrect_6();
+        flags += creation_isIncorrect_7();
+        flags += creation_isIncorrect_8();
+        flags += creation_isIncorrect_9();
+        flags += creation_isIncorrect_10();
+        flags += creation_isIncorrect_11();
 
         rowId = bookingDBHelper.createReserva("Federico Jiménez","874642093",
                 "07/01/2023","08/01/2023","23.5");
-        update_isCorrect(rowId);
-        update_isIncorrect_1(rowId);
-        update_isIncorrect_2(rowId);
-        update_isIncorrect_3(rowId);
-        update_isIncorrect_4(rowId);
-        update_isIncorrect_5(rowId);
-        update_isIncorrect_6(rowId);
-        update_isIncorrect_7(rowId);
-        update_isIncorrect_8(rowId);
-        update_isIncorrect_9(rowId);
-        update_isIncorrect_10(rowId);
-        update_isIncorrect_11(rowId);
+        flags += update_isCorrect(rowId);
+        flags += update_isIncorrect_1(rowId);
+        flags += update_isIncorrect_2(rowId);
+        flags += update_isIncorrect_3(rowId);
+        flags += update_isIncorrect_4(rowId);
+        flags += update_isIncorrect_5(rowId);
+        flags += update_isIncorrect_6(rowId);
+        flags += update_isIncorrect_7(rowId);
+        flags += update_isIncorrect_8(rowId);
+        flags += update_isIncorrect_9(rowId);
+        flags += update_isIncorrect_10(rowId);
+        flags += update_isIncorrect_11(rowId);
 
-        delete_isCorrect(rowId);
-        delete_isIncorrect();
+        flags += delete_isCorrect(rowId);
+        flags += delete_isIncorrect();
+
+        return flags;
     }
 
     // ----- Reservas --------------------------------
 
-    public void creation_isCorrect() throws Exception {
+    public int creation_isCorrect() {
         long rowId = bookingDBHelper.createReserva("Federico Jiménez","874642093",
                 "07/01/2023","08/01/2023","23.5");
-        assertTrue(-1 != rowId);
+        int flag = assertTrue(-1 != rowId);
         Log.d(BOOKING_TAG,"Reserva creada con exito");
+        return flag;
     }
 
-    public void update_isCorrect(long rowId) throws Exception {
+    public int update_isCorrect(long rowId) {
         Boolean success = bookingDBHelper.updateReserva(rowId, "Federico Jiménez","874642093",
                 "07/01/2023","08/01/2023","23.5");
-        assertTrue(success);
+        int flag = assertTrue(success);
         Log.d(BOOKING_TAG,"Reserva actualizada con exito");
+        return flag;
     }
 
-    public void delete_isCorrect(long rowId) throws Exception {
+    public int delete_isCorrect(long rowId) {
         Boolean success = bookingDBHelper.deleteReserva(rowId);
-        assertTrue(success);
+        int flag = assertTrue(success);
         Log.d(BOOKING_TAG,"Reserva borrada con exito");
+        return flag;
     }
 
-    public void creation_isIncorrect_1() throws Exception {
+    public int creation_isIncorrect_1() {
         long rowId = bookingDBHelper.createReserva(null,"874642093",
                 "07/01/2023","08/01/2023","23.5");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(BOOKING_TAG,"check: nombre nulo");
+        return flag;
     }
 
-    public void creation_isIncorrect_2() throws Exception {
+    public int creation_isIncorrect_2() {
         long rowId = bookingDBHelper.createReserva("","874642093",
                 "07/01/2023","08/01/2023","23.5");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(BOOKING_TAG,"check: nombre es cadena vacia");
+        return flag;
     }
 
-    public void creation_isIncorrect_3() throws Exception {
+    public int creation_isIncorrect_3() {
         long rowId = bookingDBHelper.createReserva("Federico Jiménez",null,
                 "07/01/2023","08/01/2023","23.5");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(BOOKING_TAG,"check: telefono es nulo");
+        return flag;
     }
 
-    public void creation_isIncorrect_4() throws Exception {
+    public int creation_isIncorrect_4() {
         long rowId = bookingDBHelper.createReserva("Federico Jiménez","1004",
                 "07/01/2023","08/01/2023","23.5");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(BOOKING_TAG,"check: telefono tiene menos de 9 digitos");
+        return flag;
     }
 
-    public void creation_isIncorrect_5() throws Exception {
+    public int creation_isIncorrect_5() {
         long rowId = bookingDBHelper.createReserva("Federico Jiménez","34874642093",
                 "07/01/2023","08/01/2023","23.5");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(BOOKING_TAG,"check: telefono tiene mas de 9 digitos");
+        return flag;
     }
 
-    public void creation_isIncorrect_6() throws Exception {
+    public int creation_isIncorrect_6() {
         long rowId = bookingDBHelper.createReserva("Federico Jiménez","a74642093",
                 "07/01/2023","08/01/2023","23.5");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(BOOKING_TAG,"check: telefono tiene caracteres no numericos");
+        return flag;
     }
 
-    public void creation_isIncorrect_7() throws Exception {
+    public int creation_isIncorrect_7() {
         long rowId = bookingDBHelper.createReserva("Federico Jiménez","874642093",
                 null,"08/01/2023","23.5");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(BOOKING_TAG,"check: fecha entrada es nulo");
+        return flag;
     }
 
-    public void creation_isIncorrect_8() throws Exception {
+    public int creation_isIncorrect_8() {
         long rowId = bookingDBHelper.createReserva("Federico Jiménez","874642093",
                 "08/01/2023","07/01/2023","23.5");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(BOOKING_TAG,"check: fecha entrada posterior a la de salida");
+        return flag;
     }
 
-    public void creation_isIncorrect_9() throws Exception {
+    public int creation_isIncorrect_9() {
         long rowId = bookingDBHelper.createReserva("Federico Jiménez","874642093",
                 "07/01/2023",null, "23.5");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(BOOKING_TAG,"check: fecha salida nulo");
+        return flag;
     }
 
-    public void creation_isIncorrect_10() throws Exception {
+    public int creation_isIncorrect_10() {
         long rowId = bookingDBHelper.createReserva("Federico Jiménez","874642093",
                 "07/01/2023","08/01/2023",null);
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(BOOKING_TAG,"check: precio nulo");
+        return flag;
     }
 
-    public void creation_isIncorrect_11() throws Exception {
+    public int creation_isIncorrect_11() {
         long rowId = bookingDBHelper.createReserva("Federico Jiménez","874642093",
                 "07/01/2023","08/01/2023","-10");
-        assertEquals(-1, rowId);
+        int flag = assertEquals(-1, rowId);
         Log.d(BOOKING_TAG,"check: precio negativo");
+        return flag;
     }
 
     // -----------------------------------------------
 
-    public void update_isIncorrect_1(long rowId) throws Exception {
+    public int update_isIncorrect_1(long rowId) {
         Boolean success = bookingDBHelper.updateReserva(rowId, null,"874642093",
                 "07/01/2023","08/01/2023","23.5");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(BOOKING_TAG,"check: nombre cliente nulo");
+        return flag;
     }
 
-    public void update_isIncorrect_2(long rowId) throws Exception {
+    public int update_isIncorrect_2(long rowId) {
         Boolean success = bookingDBHelper.updateReserva(rowId, "","874642093",
                 "07/01/2023","08/01/2023","23.5");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(BOOKING_TAG,"check: nombre cliente cadena vacia");
+        return flag;
     }
 
-    public void update_isIncorrect_3(long rowId) throws Exception {
+    public int update_isIncorrect_3(long rowId) {
         Boolean success = bookingDBHelper.updateReserva(rowId, "Federico Jiménez",null,
                 "07/01/2023","08/01/2023","23.5");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(BOOKING_TAG,"check: telefono nulo");
+        return flag;
     }
 
-    public void update_isIncorrect_4(long rowId) throws Exception {
+    public int update_isIncorrect_4(long rowId) {
         Boolean success = bookingDBHelper.updateReserva(rowId, "Federico Jiménez","1004",
                 "07/01/2023","08/01/2023","23.5");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(BOOKING_TAG,"check: telefono con menos de 9 digitos");
+        return flag;
     }
 
-    public void update_isIncorrect_5(long rowId) throws Exception {
+    public int update_isIncorrect_5(long rowId) {
         Boolean success = bookingDBHelper.updateReserva(rowId, "Federico Jiménez","34874642093",
                 "07/01/2023","08/01/2023","23.5");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(BOOKING_TAG,"check: telefono con mas de 9 digitos");
+        return flag;
     }
 
-    public void update_isIncorrect_6(long rowId) throws Exception {
+    public int update_isIncorrect_6(long rowId) {
         Boolean success = bookingDBHelper.updateReserva(rowId, "Federico Jiménez","a74642093",
                 "07/01/2023","08/01/2023","23.5");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(BOOKING_TAG,"check: telefono con caracteres no numericos");
+        return flag;
     }
 
-    public void update_isIncorrect_7(long rowId) throws Exception {
+    public int update_isIncorrect_7(long rowId) {
         Boolean success = bookingDBHelper.updateReserva(rowId, "Federico Jiménez","874642093",
                 null,"08/01/2023","23.5");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(BOOKING_TAG,"check: fecha entrada nula");
+        return flag;
     }
 
-    public void update_isIncorrect_8(long rowId) throws Exception {
+    public int update_isIncorrect_8(long rowId) {
         Boolean success = bookingDBHelper.updateReserva(rowId, "Federico Jiménez","874642093",
                 "08/01/2023","07/01/2023","23.5");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(BOOKING_TAG,"check: fecha entrada posterior a la de salida");
+        return flag;
     }
 
-    public void update_isIncorrect_9(long rowId) throws Exception {
+    public int update_isIncorrect_9(long rowId) {
         Boolean success = bookingDBHelper.updateReserva(rowId, "Federico Jiménez","874642093",
                 "07/01/2023",null,"23.5");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(BOOKING_TAG,"check: fecha salida nula");
+        return flag;
     }
 
-    public void update_isIncorrect_10(long rowId) throws Exception {
+    public int update_isIncorrect_10(long rowId) {
         Boolean success = bookingDBHelper.updateReserva(rowId, "Federico Jiménez","874642093",
                 "07/01/2023","08/01/2023",null);
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(BOOKING_TAG,"check: precio nulo");
+        return flag;
     }
 
-    public void update_isIncorrect_11(long rowId) throws Exception {
+    public int update_isIncorrect_11(long rowId) {
         Boolean success = bookingDBHelper.updateReserva(rowId, "Federico Jiménez","874642093",
                 "07/01/2023","08/01/2023","-10");
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(BOOKING_TAG,"check: precio negativo");
+        return flag;
     }
 
     // -----------------------------------------------
 
-    public void delete_isIncorrect() throws Exception {
+    public int delete_isIncorrect() {
         Boolean success = bookingDBHelper.deleteReserva(-1);
-        assertFalse(success);
+        int flag = assertFalse(success);
         Log.d(BOOKING_TAG,"Reserva borrada sin exito");
+        return flag;
     }
 }
