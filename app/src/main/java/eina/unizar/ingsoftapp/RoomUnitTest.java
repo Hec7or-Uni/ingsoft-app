@@ -13,6 +13,7 @@ public class RoomUnitTest extends Test {
     public void run(Context ctx) throws Exception {
         roomsDBHelper = new RoomsDbAdapter(ctx);
         roomsDBHelper.open();
+        long rowId = 0;
 
         creation_isCorrect();
         creation_isIncorrect_1();
@@ -26,6 +27,22 @@ public class RoomUnitTest extends Test {
         creation_isIncorrect_9();
         creation_isIncorrect_10();
 
+        rowId = roomsDBHelper.createHabitacion("Luciernaga","2 camas + baño",
+                "3","23.50","25");
+        update_isCorrect(rowId);
+        update_isIncorrect_1(rowId);
+        update_isIncorrect_2(rowId);
+        update_isIncorrect_3(rowId);
+        update_isIncorrect_4(rowId);
+        update_isIncorrect_5(rowId);
+        update_isIncorrect_6(rowId);
+        update_isIncorrect_7(rowId);
+        update_isIncorrect_8(rowId);
+        update_isIncorrect_9(rowId);
+        update_isIncorrect_10(rowId);
+
+        delete_isCorrect(rowId);
+        delete_isIncorrect();
     }
 
     // ----- Habitaciones ----------------------------
@@ -203,6 +220,6 @@ public class RoomUnitTest extends Test {
     public void delete_isIncorrect() throws Exception {
         Boolean success = roomsDBHelper.deleteHabitacion(-1);
         assertFalse(success);
-        Log.d(ROOM_TAG,"Fallo al eliminar una habitación");
+        Log.d(ROOM_TAG,"check: Eliminar habitación fallo por indice negativo.");
     }
 }

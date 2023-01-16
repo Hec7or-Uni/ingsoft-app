@@ -1,5 +1,6 @@
 package eina.unizar.ingsoftapp;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.lang.reflect.InvocationTargetException;
@@ -10,29 +11,27 @@ public class HabitacionesReservasUnitTest extends Test {
     private HabitacionesReservasDbAdapter   mixDBHelper;
 
 
-    public void run() throws InvocationTargetException, IllegalAccessException {
-        Class miClase = HabitacionesReservasUnitTest.class;
-        Method[] methods = miClase.getDeclaredMethods();
-        Object obj = new RoomUnitTest();
+    public void run(Context ctx) throws Exception {
+        mixDBHelper = new HabitacionesReservasDbAdapter(ctx);
+        mixDBHelper.open();
+        long roomId = 1, resId = 1;
 
-        for (Method method : methods) {
-            System.out.println(method.getName());
+        creation_isCorrect();
+        creation_isIncorrect_1();
+        creation_isIncorrect_2();
+        creation_isIncorrect_3();
+        creation_isIncorrect_4();
 
-            if (method.getName().startsWith("creation")) {
-                method.invoke(obj);
-            } else if (method.getName().startsWith("update")) {
-                mixDBHelper.createHabitacionReserva(1,1,"2");
-                method.invoke(obj, 1, 1);
-                mixDBHelper.deleteHabitacionReserva(1, 1);
-            } else if (method.getName().startsWith("delete")) {
-                if (method.getName().contains("Incorrect")) {
-                    method.invoke(obj);
-                } else {
-                    mixDBHelper.createHabitacionReserva(1,1,"2");
-                    method.invoke(obj, 1, 1);
-                }
-            }
-        }
+        mixDBHelper.createHabitacionReserva(roomId,resId,"2");
+        update_isCorrect(roomId, resId);
+        update_isIncorrect_1();
+        update_isIncorrect_2();
+        update_isIncorrect_3();
+        update_isIncorrect_4();
+
+        delete_isCorrect(roomId, resId);
+        delete_isIncorrect_1();
+        delete_isIncorrect_2();
     }
 
     // ----- Habitaciones y Reservas -----

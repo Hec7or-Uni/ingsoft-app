@@ -113,9 +113,9 @@ public class RoomActivity extends AppCompatActivity {
 
         if (id == R.id.item1) {
             try {
-                Room.run(this);
-//                Reservation.run();
-//                Mix.run();
+//                Room.run(this);
+//                Reservation.run(this);
+                Mix.run(this);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             } catch (Exception e) {

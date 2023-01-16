@@ -79,28 +79,34 @@ public class ReservationDbAdapter {
      */
     public long createReserva(String nombreCliente, String telefono, String fechaEntrada,
                               String fechaSalida, String precio) {
+        long result = 0;
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            Date dateIn = dateFormat.parse(fechaEntrada);
-            Date dateOut = dateFormat.parse(fechaSalida);
-
-            if (nombreCliente == null || nombreCliente.length() <= 0 ) { return -1; }
-            else if (telefono == null || telefono.length() < 9 || telefono.length() > 9 || !telefono.matches("\\d+")) { return -1; }
-            else if (fechaEntrada == null || dateIn.compareTo(dateOut) >= 0) { return -1; }
-            else if (fechaSalida == null) { return -1; }
-            else if (precio == null || Float.parseFloat(precio) < 0) { return -1; }
+            if (nombreCliente == null || nombreCliente.length() <= 0 ) { result = -1; }
+            else if (telefono == null || telefono.length() < 9 || telefono.length() > 9 || !telefono.matches("\\d+")) { result = -1; }
+            else if (precio == null || Float.parseFloat(precio) < 0) { result = -1; }
+            else if (fechaEntrada == null || fechaSalida == null) { result = -1; }
+            else {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date dateIn = dateFormat.parse(fechaEntrada);
+                Date dateOut = dateFormat.parse(fechaSalida);
+                if (dateIn.compareTo(dateOut) >= 0) { result = -1; }
+            }
         } catch (Exception e) {
             Log.w(DATABASE_TABLE, e.getStackTrace().toString());
         }
 
-        ContentValues initialValues = new ContentValues();
-        initialValues.put(KEY_NOMBRE, nombreCliente);
-        initialValues.put(KEY_TELEFONO, telefono);
-        initialValues.put(KEY_FECHAENTRADA, fechaEntrada);
-        initialValues.put(KEY_FECHASALIDA, fechaSalida);
-        initialValues.put(KEY_PRECIO, precio);
+        if (result == 0) {
+            ContentValues initialValues = new ContentValues();
+            initialValues.put(KEY_NOMBRE, nombreCliente);
+            initialValues.put(KEY_TELEFONO, telefono);
+            initialValues.put(KEY_FECHAENTRADA, fechaEntrada);
+            initialValues.put(KEY_FECHASALIDA, fechaSalida);
+            initialValues.put(KEY_PRECIO, precio);
 
-        return mDb.insert(DATABASE_TABLE, null, initialValues);
+            result = mDb.insert(DATABASE_TABLE, null, initialValues);
+        }
+
+        return result;
     }
 
     /**
@@ -191,29 +197,34 @@ public class ReservationDbAdapter {
      */
     public boolean updateReserva(long rowId, String nombreCliente, String telefono,
                                  String fechaEntrada, String fechaSalida, String precio) {
+        boolean result = true;
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            Date dateIn = dateFormat.parse(fechaEntrada);
-            Date dateOut = dateFormat.parse(fechaSalida);
-
-            if (rowId <= -1) { return false; }
-            else if (nombreCliente == null || nombreCliente.length() <= 0 ) { return false; }
-            else if (telefono == null || telefono.length() < 9 || telefono.length() > 9 || !telefono.matches("\\d+")) { return false; }
-            else if (fechaEntrada == null || dateIn.compareTo(dateOut) >= 0) { return false; }
-            else if (fechaSalida == null) { return false; }
-            else if (precio == null || Float.parseFloat(precio) < 0) { return false; }
+            if (rowId <= -1) { result = false; }
+            else if (nombreCliente == null || nombreCliente.length() <= 0 ) { result = false; }
+            else if (telefono == null || telefono.length() < 9 || telefono.length() > 9 || !telefono.matches("\\d+")) { result = false; }
+            else if (fechaEntrada == null || fechaSalida == null) { result = false; }
+            else if (precio == null || Float.parseFloat(precio) < 0) { result = false; }
+            else {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date dateIn = dateFormat.parse(fechaEntrada);
+                Date dateOut = dateFormat.parse(fechaSalida);
+                if (dateIn.compareTo(dateOut) >= 0) { result = false; }
+            }
         } catch (Exception e) {
             Log.w(DATABASE_TABLE, e.getStackTrace().toString());
         }
 
-        ContentValues args = new ContentValues();
-        args.put(KEY_NOMBRE, nombreCliente);
-        args.put(KEY_TELEFONO, telefono);
-        args.put(KEY_FECHAENTRADA, fechaEntrada);
-        args.put(KEY_FECHASALIDA, fechaSalida);
-        args.put(KEY_PRECIO, precio);
+        if (result) {
+            ContentValues args = new ContentValues();
+            args.put(KEY_NOMBRE, nombreCliente);
+            args.put(KEY_TELEFONO, telefono);
+            args.put(KEY_FECHAENTRADA, fechaEntrada);
+            args.put(KEY_FECHASALIDA, fechaSalida);
+            args.put(KEY_PRECIO, precio);
 
+            result = mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
+        }
 
-        return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
+        return result;
     }
 }

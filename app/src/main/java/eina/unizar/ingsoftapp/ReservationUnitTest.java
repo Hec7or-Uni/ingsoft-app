@@ -1,5 +1,6 @@
 package eina.unizar.ingsoftapp;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.lang.reflect.InvocationTargetException;
@@ -9,31 +10,41 @@ public class ReservationUnitTest extends Test {
     private static final String BOOKING_TAG = "Reservas";
     private ReservationDbAdapter            bookingDBHelper;
 
-    public void run() throws InvocationTargetException, IllegalAccessException {
-        Class miClase = RoomUnitTest.class;
-        Method[] methods = miClase.getDeclaredMethods();
-        Object obj = new RoomUnitTest();
+    public void run(Context ctx) throws Exception {
+        bookingDBHelper = new ReservationDbAdapter(ctx);
+        bookingDBHelper.open();
+        long rowId = 0;
 
-        for (Method method : methods) {
-            System.out.println(method.getName());
+        creation_isCorrect();
+        creation_isIncorrect_1();
+        creation_isIncorrect_2();
+        creation_isIncorrect_3();
+        creation_isIncorrect_4();
+        creation_isIncorrect_5();
+        creation_isIncorrect_6();
+        creation_isIncorrect_7();
+        creation_isIncorrect_8();
+        creation_isIncorrect_9();
+        creation_isIncorrect_10();
+        creation_isIncorrect_11();
 
-            if (method.getName().startsWith("creation")) {
-                method.invoke(obj);
-            } else if (method.getName().startsWith("update")) {
-                long rowId = bookingDBHelper.createReserva("Federico Jiménez","874642093",
-                        "07/01/2023","08/01/2023","23.5");
-                method.invoke(obj, rowId);
-                bookingDBHelper.deleteReserva(rowId);
-            } else if (method.getName().startsWith("delete")) {
-                if (method.getName().contains("Incorrect")) {
-                    method.invoke(obj);
-                } else {
-                    long rowId = bookingDBHelper.createReserva("Federico Jiménez","874642093",
-                            "07/01/2023","08/01/2023","23.5");
-                    method.invoke(obj, rowId);
-                }
-            }
-        }
+        rowId = bookingDBHelper.createReserva("Federico Jiménez","874642093",
+                "07/01/2023","08/01/2023","23.5");
+        update_isCorrect(rowId);
+        update_isIncorrect_1(rowId);
+        update_isIncorrect_2(rowId);
+        update_isIncorrect_3(rowId);
+        update_isIncorrect_4(rowId);
+        update_isIncorrect_5(rowId);
+        update_isIncorrect_6(rowId);
+        update_isIncorrect_7(rowId);
+        update_isIncorrect_8(rowId);
+        update_isIncorrect_9(rowId);
+        update_isIncorrect_10(rowId);
+        update_isIncorrect_11(rowId);
+
+        delete_isCorrect(rowId);
+        delete_isIncorrect();
     }
 
     // ----- Reservas --------------------------------

@@ -170,24 +170,29 @@ public class RoomsDbAdapter {
      * @return true if the note was successfully updated, false otherwise
      */
     public boolean updateHabitacion(long rowId, String nombre, String descripcion, String capacidad, String precio, String porcentaje) {
+        boolean result = true;
         try {
-            if (rowId <= -1) { return false; }
-            else if (nombre == null || nombre.length() <= 0 ) { return false; }
-            else if (descripcion == null ) { return false; }
-            else if (capacidad == null || Integer.parseInt(capacidad) < 1) { return false; }
-            else if (precio == null || Integer.parseInt(precio) < 0) { return false; }
-            else if (porcentaje == null || Float.parseFloat(porcentaje) < 0 || Float.parseFloat(porcentaje) > 100) { return false; }
+            if (rowId <= -1) { result = false; }
+            else if (nombre == null || nombre.length() <= 0 ) { result = false; }
+            else if (descripcion == null ) { result = false; }
+            else if (capacidad == null || Integer.parseInt(capacidad) < 1) { result = false; }
+            else if (precio == null || Float.parseFloat(precio) < 0) { result = false; }
+            else if (porcentaje == null || Float.parseFloat(porcentaje) < 0 || Float.parseFloat(porcentaje) > 100) { result = false; }
         } catch (Exception e) {
             Log.w(DATABASE_TABLE, e.getStackTrace().toString());
         }
 
-        ContentValues args = new ContentValues();
-        args.put(KEY_NOMBRE, nombre);
-        args.put(KEY_DESCRIPCION, descripcion);
-        args.put(KEY_CAPACIDAD, capacidad);
-        args.put(KEY_PRECIO, precio);
-        args.put(KEY_PORCENTAJEEXTRA, porcentaje);
+        if (result) {
+            ContentValues args = new ContentValues();
+            args.put(KEY_NOMBRE, nombre);
+            args.put(KEY_DESCRIPCION, descripcion);
+            args.put(KEY_CAPACIDAD, capacidad);
+            args.put(KEY_PRECIO, precio);
+            args.put(KEY_PORCENTAJEEXTRA, porcentaje);
 
-        return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
+            result = mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
+        }
+
+        return result;
     }
 }
