@@ -24,6 +24,9 @@ public class RoomActivity extends AppCompatActivity {
     private RoomsDbAdapter mDbHelper;
     ListView rooms;
 
+    private final int ROOM_LIMIT = 100;
+    private int roomsLimit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +66,11 @@ public class RoomActivity extends AppCompatActivity {
         addNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(toCreateRoom, 0);
+                if (roomsLimit < ROOM_LIMIT) {
+                    startActivityForResult(toCreateRoom, 0);
+                } else {
+                    Toast.makeText(RoomActivity.this, "Limite de habitaciones alcanzado", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -121,15 +128,15 @@ public class RoomActivity extends AppCompatActivity {
             if (0 == Mix.run(this)){ Toast.makeText(this, "Test both OK", Toast.LENGTH_LONG).show(); }
             else { Toast.makeText(this, "ERROR Test both", Toast.LENGTH_LONG).show(); }
         } else if (id == R.id.item2) {
-            Toast.makeText(this, "Opcion 2 pulsada", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Test volumen para habitaciones", Toast.LENGTH_LONG).show();
             TestVolumen.crearCienHabitaciones();
             fillData();
         } else if (id == R.id.item3) {
-            Toast.makeText(this, "Opcion 3 pulsada", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Test de sobrecarga", Toast.LENGTH_LONG).show();
             TestVolumen.pruebaSobrecarga();
             fillData();
-        }else if (id == R.id.item4) {
-            Toast.makeText(this, "Opcion 4 pulsada", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.item4) {
+            Toast.makeText(this, "Eliminar habitaciones", Toast.LENGTH_LONG).show();
             TestVolumen.borrarHabitaciones();
             fillData();
         }
@@ -139,6 +146,7 @@ public class RoomActivity extends AppCompatActivity {
 
     private void fillData() {
         Cursor notesCursor = mDbHelper.fetchAllHabitaciones();
+        roomsLimit = notesCursor.getCount();
         String[] from = new String[] { RoomsDbAdapter.KEY_NOMBRE, RoomsDbAdapter.KEY_CAPACIDAD, RoomsDbAdapter.KEY_PRECIO, RoomsDbAdapter.KEY_ROWID  };
         int[] to = new int[] { R.id.title, R.id.ocupantes, R.id.precio, R.id.identifier };
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.room, notesCursor, from, to);

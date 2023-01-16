@@ -25,6 +25,9 @@ public class ReservationActivity extends AppCompatActivity {
     private ReservationDbAdapter mDbHelper;
     ListView reservations;
 
+    private final int RESERVATION_LIMIT = 2000;
+    private int reservationLimit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +68,11 @@ public class ReservationActivity extends AppCompatActivity {
         addNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(toCreateReservation, 0);
+                if (reservationLimit < RESERVATION_LIMIT) {
+                    startActivityForResult(toCreateReservation, 0);
+                } else {
+                    Toast.makeText(ReservationActivity.this, "Limite de reservas alcanzado", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -123,13 +130,13 @@ public class ReservationActivity extends AppCompatActivity {
             if (0 == Mix.run(this)){ Toast.makeText(this, "Test both OK", Toast.LENGTH_LONG).show(); }
             else { Toast.makeText(this, "ERROR Test both", Toast.LENGTH_LONG).show(); }
         } else if (id == R.id.item2) {
-            Toast.makeText(this, "Opcion 2 pulsada", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Test volumen para reservas", Toast.LENGTH_LONG).show();
             TestVolumen.crearDosmilReservas();
             fillData();
         } else if (id == R.id.item3) {
-            Toast.makeText(this, "Opcion 3 pulsada", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No hay test de sobrecarga para reservas", Toast.LENGTH_LONG).show();
         }else if (id == R.id.item4) {
-            Toast.makeText(this, "Opcion 4 pulsada", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Eliminar reservas", Toast.LENGTH_LONG).show();
             TestVolumen.borrarReservas();
             fillData();
         }
@@ -139,6 +146,7 @@ public class ReservationActivity extends AppCompatActivity {
 
     private void fillData() {
         Cursor notesCursor = mDbHelper.fetchAllReservas();
+        reservationLimit = notesCursor.getCount();
         String[] from = new String[] { ReservationDbAdapter.KEY_NOMBRE, ReservationDbAdapter.KEY_FECHAENTRADA, ReservationDbAdapter.KEY_PRECIO};
         int[] to = new int[] { R.id.title_res, R.id.dates_res, R.id.price_res};
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.reservation, notesCursor, from, to);
